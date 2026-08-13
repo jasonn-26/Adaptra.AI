@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080d18">
+<title>Adaptra.AI 3.1</title>
+<style>
+*{box-sizing:border-box}
+:root{--bg:#080d18;--panel:#0e1522;--panel2:#151f30;--line:#26344a;--text:#f5f7fb;--muted:#9eacc0;--accent:#4d78ff;--accent2:#8b5cf6;--ai:#151f30;--user:#3166e8;--good:#61e39a}
+body{margin:0;background:radial-gradient(circle at 50% -15%,#1b2b55 0,#080d18 48%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+.app{height:100vh;display:flex;flex-direction:column;max-width:980px;margin:auto}
+header{height:68px;display:flex;align-items:center;gap:11px;padding:10px 15px;background:#0e1522e8;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+.logo{width:43px;height:43px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));font-weight:900;font-size:21px}
+.brand b{font-size:18px}.brand small{display:block;color:var(--good);font-size:10px}.spacer{flex:1}
+.icon{width:40px;height:40px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--text)}
+#chat{flex:1;overflow:auto;padding:18px 13px 145px}
+.info{max-width:850px;margin:0 auto 18px;padding:18px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,var(--panel),var(--panel2))}
+.info h2{margin:0 0 6px}.info p{margin:0;color:var(--muted)}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:11px;padding:7px 9px;border:1px solid var(--line);border-radius:99px;color:#cbd5e1}
+.msg{max-width:850px;margin:10px auto;display:flex;gap:8px;animation:up .2s}
+.msg.user{justify-content:flex-end}.avatar{width:34px;height:34px;flex:none;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));font-weight:800}
+.bubble{max-width:min(84%,720px);padding:13px 15px;border-radius:18px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+.ai .bubble{background:var(--ai);border:1px solid var(--line);border-top-left-radius:6px}.user .bubble{background:linear-gradient(135deg,var(--user),#485fe0);border-top-right-radius:6px}
+.composerWrap{position:fixed;bottom:0;left:0;right:0;padding:22px 12px 10px;background:linear-gradient(transparent,var(--bg) 30%);z-index:4}
+.composer{max-width:850px;margin:auto}.box{display:flex;gap:7px;align-items:flex-end;background:var(--panel);border:1px solid #35445c;border-radius:19px;padding:7px;box-shadow:0 16px 40px #0008}
+textarea{flex:1;background:transparent;border:0;outline:0;color:var(--text);resize:none;padding:10px;min-height:43px;max-height:130px}textarea::placeholder{color:var(--muted)}
+.send{width:46px;height:46px;border:0;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:19px}
+.tools{display:flex;gap:6px;margin:7px auto 0;max-width:850px;overflow:auto}.tool{border:1px solid var(--line);background:var(--panel);color:var(--muted);padding:8px 11px;border-radius:11px;white-space:nowrap;font-size:11px}
+.tool.active{color:#fff;border-color:var(--accent);background:#15254a}
+.dots{display:inline-flex;gap:4px}.dots i{width:6px;height:6px;background:#9ab5ff;border-radius:50%;animation:blink 1.1s infinite}
+.dots i:nth-child(2){animation-delay:.18s}.dots i:nth-child(3){animation-delay:.36s}
+@keyframes blink{0%,60%,100%{opacity:.2}30%{opacity:1;transform:translateY(-3px)}}@keyframes up{from{opacity:0;transform:translateY(5px)}to{opacity:1}}
+.drawer{display:none;position:fixed;inset:0;background:#0009;z-index:20}.drawer.open{display:block}
+.sheet{position:absolute;right:0;top:0;height:100%;width:min(380px,92vw);background:var(--panel);border-left:1px solid var(--line);padding:20px;overflow:auto}
+.sheet h2{margin-top:0}.row{padding:14px 0;border-bottom:1px solid var(--line)}
+label{display:block;color:var(--muted);font-size:12px;margin-bottom:7px}
+select{width:100%;padding:10px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--text)}
+.memory{display:flex;gap:6px;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);margin:6px 0;font-size:12px}.memory span{flex:1}
+@media(max-width:600px){.bubble{max-width:89%}.brand b{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<div class="logo">A</div>
+<div class="brand"><b>Adaptra.AI 3.1</b><small id="status">● iniciando</small></div>
+<div class="spacer"></div>
+<button class="icon" id="newChat" title="Novo chat">＋</button>
+<button class="icon" id="settings" title="Configurações">⚙️</button>
+</header>
+
+<main id="chat"></main>
+
+<div class="composerWrap">
+<div class="composer">
+<div class="box">
+<textarea id="input" placeholder="Pergunte alguma coisa..." rows="1"></textarea>
+<button class="icon" id="mic" title="Falar">🎙️</button>
+<button class="send" id="send" title="Enviar">➤</button>
+</div>
+<div class="tools">
+<button class="tool active" id="modeAI">🧠 Adaptra</button>
+<button class="tool" id="modeWeb">🌐 Web</button>
+<button class="tool" id="teach">🧠 Ensinar</button>
+<button class="tool" id="memoryBtn">💾 Memória</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="drawer" id="drawer">
+<aside class="sheet">
+<button class="icon" id="close" style="float:right">×</button>
+<h2>⚙️ Configurações</h2>
+
+<div class="row"><label>Personalidade</label>
+<select id="personality">
+<option>Amigável</option><option>Casual</option><option>Professor</option><option>Profissional</option><option>Criativa</option>
+</select></div>
+
+<div class="row"><label>Tamanho das respostas</label>
+<select id="length"><option value="short">Curta</option><option value="normal">Equilibrada</option><option value="long">Detalhada</option></select></div>
+
+<div class="row"><label>Voz</label>
+<select id="voiceRate"><option value=".82">Calma</option><option value=".95">Normal</option><option value="1.1">Rápida</option></select>
+<button class="tool" id="speakLast" style="margin-top:8px">🔊 Ler última resposta</button></div>
+
+<div class="row"><label>Memórias salvas</label>
+<div id="memoryList"></div>
+<button class="tool" id="clearMemory" style="margin-top:8px">Apagar memórias</button></div>
+</aside>
+</div>
+
+<script type="module">
+import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1";
+
+const MODEL="onnx-community/Qwen3-0.6B-ONNX";
+const KEY="adaptraAI3_1_memory";
+const CFGKEY="adaptraAI3_1_config";
+
+const chat=document.querySelector("#chat"),input=document.querySelector("#input");
+const send=document.querySelector("#send"),status=document.querySelector("#status");
+let memory=JSON.parse(localStorage.getItem(KEY)||"{}");
+let cfg=JSON.parse(localStorage.getItem(CFGKEY)||"{}");
+let generator=null,busy=false,last="",history=[],mode="ai",teachMode=false;
+
+const norm=s=>String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const saveMemory=()=>localStorage.setItem(KEY,JSON.stringify(memory));
+const saveCfg=()=>localStorage.setItem(CFGKEY,JSON.stringify(cfg));
+
+function add(text,type="ai",html=false){
+const row=document.createElement("div");row.className="msg "+type;
+if(type==="ai"){const av=document.createElement("div");av.className="avatar";av.textContent="A";row.appendChild(av)}
+const b=document.createElement("div");b.className="bubble";html?b.innerHTML=text:b.textContent=text;
+row.appendChild(b);chat.appendChild(row);chat.scrollTop=chat.scrollHeight;return b;
+}
+
+function intro(){
+chat.innerHTML='<section class="info"><h2>Olá! 👋 Eu sou a Adaptra.</h2><p>Versão <b>3.1</b> com personalidade, memória, contexto, voz e interface renovada.</p><div class="chips"><span class="chip">🧠 Cérebro local</span><span class="chip">💾 Memória</span><span class="chip">🎭 Personalidade</span><span class="chip">🎙️ Voz</span><span class="chip">🌐 Web opcional</span></div></section>';
+}
+
+function clean(s){return String(s||"").replace(/<think>[\s\S]*?<\/think>/gi,"").replace(/<\|im_end\|>/g,"").replace(/^assistant\s*[:\-]?\s*/i,"").trim()}
+
+function shortText(s,q){
+s=clean(s);if(!s)return"Não consegui responder.";
+if((cfg.length||"short")==="short"&&!/explique|detalhe|detalhadamente|mais detalhes|passo a passo/i.test(q)){
+const p=s.split(/(?<=[.!?])\s+/);if(p.length>3)s=p.slice(0,3).join(" ");
+}return s;
+}
+
+function calc(q){
+if(!/^[0-9+\-*/().,%\s]+$/.test(q))return null;
+try{const v=Function('"use strict";return ('+q.replace(/,/g,".")+')')();return Number.isFinite(v)?"🧮 "+v:null}catch{return null}
+}
+
+async function webSearch(q){
+const u="https://pt.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch="+encodeURIComponent(q)+"&gsrlimit=3&prop=extracts&exintro=1&explaintext=1&format=json&origin=*";
+const r=await fetch(u);if(!r.ok)throw Error();
+const d=await r.json(),p=d?.query?.pages?Object.values(d.query.pages).find(x=>x.extract):null;if(!p)throw Error();
+return "🌐 "+p.extract.trim().split(/(?<=[.!?])\s+/).slice(0,4).join(" ");
+}
+
+function personalityPrompt(){
+const p=cfg.personality||"Amigável";
+const styles={
+"Amigável":"seja acolhedora, clara e simpática, sem exagerar nos emojis",
+"Casual":"fale de forma natural e descontraída",
+"Professor":"explique com clareza e use exemplos quando ajudarem",
+"Profissional":"seja objetiva, organizada e profissional",
+"Criativa":"seja criativa, mas mantenha precisão"
+};
+return styles[p]||styles["Amigável"];
+}
+
+async function generate(q){
+if(!generator)return null;
+const mem=Object.entries(memory).slice(-20).map(([k,v])=>"- "+k+": "+v).join("\n");
+const system=`Você é a Adaptra.AI 3.1. Responda em português do Brasil. ${personalityPrompt()}.
+Priorize respostas corretas. Se não souber, diga que não sabe. Não invente fatos.
+Responda de forma ${(cfg.length||"short")==="long"?"detalhada":(cfg.length||"short")==="normal"?"equilibrada":"curta"}.
+${mem?"Memórias disponíveis:\n"+mem:""}`;
+const messages=[{role:"system",content:system}];
+history.slice(-6).forEach(x=>messages.push(x));messages.push({role:"user",content:q});
+const o=await generator(messages,{max_new_tokens:220,do_sample:true,temperature:.65,top_p:.9,repetition_penalty:1.08});
+const g=o?.[0]?.generated_text;let a=Array.isArray(g)?g[g.length-1]?.content:g;
+a=shortText(a,q);history.push({role:"user",content:q},{role:"assistant",content:a});
+if(history.length>10)history.splice(0,2);return a;
+}
+
+async function answer(q){
+const n=norm(q);
+if(["oi","ola","olá"].includes(n)||n.startsWith("bom dia")||n.startsWith("boa tarde")||n.startsWith("boa noite"))return"Olá! 👋 Como posso ajudar?";
+if(n.includes("seu nome")||n.includes("quem e voce"))return"Eu sou a Adaptra.AI 3.1. 🤖";
+if(n.startsWith("aprenda:")){const p=q.slice(8).split("|");if(p.length<2)return"Use: aprenda: pergunta | resposta";memory[norm(p[0])]=p.slice(1).join("|").trim();saveMemory();return"🧠 Aprendi e salvei na memória."}
+const c=calc(q);if(c)return c;
+if(mode==="web"){try{return await webSearch(q)}catch{return"Não consegui consultar a Web agora."}}
+if(memory[n])return"🧠 "+memory[n];
+const local=await generate(q);if(local)return local;
+try{return await webSearch(q)}catch{}
+return"Não consegui responder agora. Tente novamente.";
+}
+
+async function sendMsg(q=input.value.trim()){
+if(!q||busy)return;
+add(esc(q),"user",true);input.value="";input.style.height="auto";
+if(teachMode){teachMode=false;memory["ensinamento_"+Date.now()]=q;saveMemory();add("🧠 Aprendi e salvei isso na minha memória.");return}
+busy=true;send.disabled=true;
+const bubble=add('<span>Adaptra está pensando </span><span class="dots"><i></i><i></i><i></i></span>','ai',true);
+try{
+const a=await answer(q);bubble.innerHTML="";let i=0;
+const timer=setInterval(()=>{bubble.textContent+=a.charAt(i++);chat.scrollTop=chat.scrollHeight;if(i>=a.length){clearInterval(timer);last=a}},9);
+}catch{bubble.textContent="Não consegui responder. Tente novamente."}
+busy=false;send.disabled=false;input.focus();
+}
+
+function renderMemory(){
+const box=document.querySelector("#memoryList");box.innerHTML="";
+const entries=Object.entries(memory);
+if(!entries.length){box.innerHTML='<span style="color:var(--muted);font-size:12px">Nenhuma memória salva.</span>';return}
+entries.slice(-15).forEach(([k,v])=>{
+const d=document.createElement("div");d.className="memory";const s=document.createElement("span");s.textContent=k+" → "+v;
+const b=document.createElement("button");b.className="tool";b.textContent="×";
+b.onclick=()=>{delete memory[k];saveMemory();renderMemory()};d.append(s,b);box.appendChild(d);
+});
+}
+
+function speak(text){
+if(!("speechSynthesis"in window)||!text)return;
+speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="pt-BR";u.rate=Number(document.querySelector("#voiceRate").value||.82);u.pitch=.95;speechSynthesis.speak(u);
+}
+
+document.querySelector("#send").onclick=()=>sendMsg();
+input.addEventListener("input",()=>{input.style.height="auto";input.style.height=Math.min(input.scrollHeight,130)+"px"});
+input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMsg()}});
+document.querySelector("#modeAI").onclick=()=>{mode="ai";document.querySelector("#modeAI").classList.add("active");document.querySelector("#modeWeb").classList.remove("active")};
+document.querySelector("#modeWeb").onclick=()=>{mode="web";document.querySelector("#modeWeb").classList.add("active");document.querySelector("#modeAI").classList.remove("active")};
+document.querySelector("#teach").onclick=()=>{teachMode=true;add("🧠 Pode me ensinar. Escreva a informação que você quer que eu guarde.","ai")};
+document.querySelector("#memoryBtn").onclick=()=>{document.querySelector("#drawer").classList.add("open");renderMemory()};
+document.querySelector("#newChat").onclick=()=>{history=[];intro()};
+document.querySelector("#settings").onclick=()=>{document.querySelector("#drawer").classList.add("open");renderMemory()};
+document.querySelector("#close").onclick=()=>document.querySelector("#drawer").classList.remove("open");
+document.querySelector("#drawer").onclick=e=>{if(e.target.id==="drawer")e.target.classList.remove("open")};
+document.querySelector("#speakLast").onclick=()=>speak(last);
+document.querySelector("#mic").onclick=()=>{
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(!SR){add("🎙️ Seu navegador não oferece reconhecimento de voz.");return}
+const r=new SR();r.lang="pt-BR";r.onresult=e=>{input.value=e.results[0][0].transcript;sendMsg()};r.start();
+};
+document.querySelector("#clearMemory").onclick=()=>{memory={};saveMemory();renderMemory()};
+document.querySelector("#personality").onchange=e=>{cfg.personality=e.target.value;saveCfg()};
+document.querySelector("#length").onchange=e=>{cfg.length=e.target.value;saveCfg()};
+
+document.querySelector("#voiceRate").onchange=e=>{cfg.voiceRate=e.target.value;saveCfg()};
+
+(function loadCfg(){
+document.querySelector("#personality").value=cfg.personality||"Amigável";
+document.querySelector("#length").value=cfg.length||"short";
+document.querySelector("#voiceRate").value=cfg.voiceRate||".82";
+intro();
+})();
+
+(async()=>{
+try{
+status.textContent="● carregando cérebro local";
+const gpu="gpu"in navigator;
+generator=await pipeline("text-generation",MODEL,{device:gpu?"webgpu":"wasm",dtype:gpu?"q4f16":"q4"});
+status.textContent=gpu?"● ONLINE • WebGPU":"● ONLINE • CPU";
+add("🧠 Cérebro local pronto. A Adaptra 3.1 está online.","ai");
+}catch(e){
+console.warn(e);status.textContent="● ONLINE • modo leve";
+add("🌐 O cérebro local não terminou de carregar. A Adaptra continua disponível em modo leve.","ai");
+}
+})();
+</script>
+</body>
+</html>
