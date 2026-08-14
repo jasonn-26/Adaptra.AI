@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070b14">
+<title>Adaptra.AI 3.3</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#070b14;--panel:#0d1422;--panel2:#111a2b;--line:#26334a;
+  --text:#f5f7ff;--muted:#9aa8bd;--accent:#6575ff;--accent2:#8c63ff;
+  --good:#61e6a0;--user:#4268ed;--shadow:0 18px 55px rgba(0,0,0,.28)
+}
+body{margin:0;background:
+ radial-gradient(circle at 20% -10%,rgba(101,117,255,.18),transparent 35%),
+ radial-gradient(circle at 100% 20%,rgba(140,99,255,.12),transparent 30%),
+ var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button,textarea{font:inherit}
+.app{height:100dvh;max-width:980px;margin:auto;display:flex;flex-direction:column}
+header{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(10,15,26,.82);backdrop-filter:blur(18px);position:relative;z-index:3}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 8px 25px rgba(101,117,255,.3);font-weight:900}
+.name{font-size:18px;font-weight:850;letter-spacing:.1px}.name span{color:#8d99ff}
+.version{font-size:10px;color:var(--muted);margin-top:1px}
+.status{font-size:10px;color:var(--good);white-space:nowrap}
+#chat{flex:1;overflow:auto;padding:18px 14px 125px;scroll-behavior:smooth}
+.hero{background:linear-gradient(145deg,rgba(20,30,50,.95),rgba(13,20,34,.92));border:1px solid var(--line);
+ border-radius:25px;padding:20px;margin:0 auto 20px;box-shadow:var(--shadow)}
+.hero h1{margin:0 0 6px;font-size:25px}.hero p{margin:0;color:var(--muted);line-height:1.45}
+.badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.badge{padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.025);color:#b9c4d7;font-size:11px}
+.msgrow{display:flex;gap:9px;margin:12px 0;align-items:flex-end}
+.msgrow.userrow{justify-content:flex-end}
+.avatar{width:34px;height:34px;flex:0 0 34px;border-radius:12px;display:grid;place-items:center;font-weight:800;
+ background:linear-gradient(135deg,#6575ff,#9b63ff);box-shadow:0 8px 20px rgba(101,117,255,.18)}
+.msg{max-width:min(82%,700px);padding:12px 15px;border-radius:19px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+.ai{background:var(--panel2);border:1px solid rgba(255,255,255,.055);border-bottom-left-radius:7px}
+.user{background:linear-gradient(135deg,#3e65e9,#526ff0);border-bottom-right-radius:7px}
+.info{max-width:100%;background:transparent;color:var(--muted);font-size:12px;text-align:center;padding:8px}
+.composerWrap{position:fixed;bottom:0;left:0;right:0;z-index:5;padding:9px max(12px,env(safe-area-inset-left)) calc(9px + env(safe-area-inset-bottom));
+ background:linear-gradient(180deg,transparent,rgba(7,11,20,.96) 28%);pointer-events:none}
+.composer{max-width:980px;margin:auto;pointer-events:auto}
+.box{display:flex;gap:8px;background:rgba(14,21,35,.96);border:1px solid #2b3952;border-radius:20px;padding:7px;
+ box-shadow:0 14px 45px rgba(0,0,0,.38);backdrop-filter:blur(16px)}
+textarea{flex:1;background:transparent;border:0;outline:0;color:#fff;resize:none;padding:10px 11px;min-height:43px;max-height:130px}
+textarea::placeholder{color:#7f8ca2}
+.iconbtn{width:46px;height:46px;border:0;border-radius:15px;background:#172238;color:#b9c5d9;cursor:pointer}
+.send{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;font-size:20px}
+.tools{display:flex;gap:7px;margin-top:7px;overflow:auto;padding-bottom:2px}
+.tool{border:1px solid #26344c;background:#111a2a;color:#b8c4d8;border-radius:999px;padding:8px 12px;font-size:11px;white-space:nowrap}
+.tool.active{background:rgba(101,117,255,.18);border-color:#6575ff;color:#dce1ff}
+.menu{display:none;position:absolute;right:14px;top:60px;width:245px;background:#101827;border:1px solid #2a3850;border-radius:18px;padding:10px;box-shadow:var(--shadow)}
+.menu.show{display:block}.menu button{width:100%;text-align:left;border:0;background:transparent;color:#e8ecf5;padding:11px;border-radius:10px}
+.menu button:hover{background:#172238}
+.dots span{display:inline-block;animation:blink 1.1s infinite}.dots span:nth-child(2){animation-delay:.18s}.dots span:nth-child(3){animation-delay:.36s}
+@keyframes blink{0%,60%,100%{opacity:.2;transform:translateY(0)}30%{opacity:1;transform:translateY(-2px)}}
+@media(max-width:600px){.msg{max-width:88%}.hero{padding:17px;border-radius:22px}.hero h1{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="top">
+    <div class="brand">
+      <div class="logo">A</div>
+      <div><div class="name">Adaptra<span>.AI</span></div><div class="version">versão 3.3 • assistente inteligente</div></div>
+    </div>
+    <div class="status" id="status">● iniciando</div>
+    <button class="iconbtn" id="menuBtn" aria-label="Menu">☰</button>
+  </div>
+  <div class="menu" id="menu">
+    <button id="newChat">✨ Novo chat</button>
+    <button id="clearMemory">🧠 Limpar memória</button>
+    <button id="personalityBtn">🎭 Personalidade</button><button id="memoryView">📚 Ver memória</button><button id="deepSearch">🔬 Pesquisa profunda</button>
+  </div>
+</header>
+
+<div id="chat">
+  <div class="projectbar"><button class="project active" id="projectCurrent">💬 Geral</button><button class="project" id="newProject">＋ Novo projeto</button></div>
+  <div class="hero">
+    <h1>Olá! 👋 Eu sou a Adaptra.</h1>
+    <p>Versão 3.3 com contexto, memória 2.0, projetos, confiança e pesquisa aprimorada.</p>
+    <div class="badges">
+      <span class="badge">🧠 Cérebro local</span>
+      <span class="badge">💬 Conversa natural</span>
+      <span class="badge">🎭 Personalidade</span>
+      <span class="badge">🔊 Voz</span>
+      <span class="badge">🌐 Web sob comando</span>
+    </div>
+  </div>
+</div>
+
+<div class="composerWrap">
+  <div class="composer">
+    <div class="box">
+      <textarea id="input" placeholder="Converse comigo..." rows="1"></textarea>
+      <button class="iconbtn" id="voice" title="Falar">🎙️</button>
+      <button class="iconbtn send" id="send" title="Enviar">➤</button>
+    </div>
+    <div class="tools">
+      <button class="tool active" id="local">🧠 Adaptra</button>
+      <button class="tool" id="web">🌐 Web</button>
+      <button class="tool" id="teach">🧠 Ensinar</button>
+      <button class="tool" id="memory">💾 Memória</button>
+      <button class="tool" id="speak">🔊 Falar resposta</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script type="module">
+import { pipeline } from "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1";
+
+const MODEL="onnx-community/Qwen3-0.6B-ONNX";
+const KEY="adaptraAI33_memory";
+const chat=document.querySelector("#chat"),input=document.querySelector("#input");
+const send=document.querySelector("#send"),status=document.querySelector("#status");
+const menu=document.querySelector("#menu");
+let memory=JSON.parse(localStorage.getItem(KEY)||"{}");
+let generator=null,busy=false,last="",history=[],webMode=false,deepMode=false,personality="Amigável";
+let projects=JSON.parse(localStorage.getItem("adaptraAI33_projects")||"{}"),currentProject="Geral";
+
+const norm=s=>String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+const save=()=>localStorage.setItem(KEY,JSON.stringify(memory));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function add(text,type="ai"){
+  const row=document.createElement("div");
+  row.className="msgrow "+(type==="user"?"userrow":"");
+  if(type==="info"){row.innerHTML='<div class="msg info">'+text+"</div>";chat.appendChild(row);chat.scrollTop=chat.scrollHeight;return row}
+  const av=document.createElement("div");av.className="avatar";av.textContent=type==="user"?"Você":"A";
+  const bubble=document.createElement("div");bubble.className="msg "+type;bubble.innerHTML=text;
+  if(type==="user"){row.appendChild(bubble);row.appendChild(av)}else{row.appendChild(av);row.appendChild(bubble)}
+  chat.appendChild(row);chat.scrollTop=chat.scrollHeight;return bubble;
+}
+function clean(s){return String(s||"").replace(/<think>[\s\S]*?<\/think>/gi,"").replace(/<\|im_end\|>/g,"").replace(/^assistant\s*[:\-]?\s*/i,"").trim()}
+function shortText(s,q){
+  s=clean(s); if(!s)return"Não consegui responder.";
+  if(!/explique|detalhe|detalhadamente|mais detalhes|passo a passo|texto longo/i.test(q)){
+    const p=s.split(/(?<=[.!?])\s+/); if(p.length>4)s=p.slice(0,4).join(" ");
+  }
+  return s;
+}
+function calc(q){
+  if(!/^[0-9+\-*/().,%\s]+$/.test(q))return null;
+  try{const v=Function('"use strict";return ('+q.replace(/,/g,".")+')')();return Number.isFinite(v)?"🧮 "+v:null}catch{return null}
+}
+function saveProjects(){localStorage.setItem("adaptraAI33_projects",JSON.stringify(projects))}
+function projectHistory(){if(!projects[currentProject])projects[currentProject]={messages:[],notes:[]};return projects[currentProject]}
+function renderProjects(){document.querySelectorAll(".project.dynamic").forEach(x=>x.remove());const bar=document.querySelector(".projectbar");Object.keys(projects).filter(x=>x!=="Geral").slice(-5).forEach(name=>{const b=document.createElement("button");b.className="project dynamic"+(name===currentProject?" active":"");b.textContent="📁 "+name;b.onclick=()=>selectProject(name);bar.insertBefore(b,document.querySelector("#newProject"));});document.querySelector("#projectCurrent").textContent="💬 "+currentProject}
+function selectProject(name){currentProject=name;projectHistory();history=projectHistory().messages.slice(-10);saveProjects();renderProjects();add("📁 Projeto <b>"+esc(name)+"</b> selecionado.","info")}
+function identityAnswer(n){if(/quem (e|é) (seu|o seu) criador|quem criou voce|quem criou você|quem fez voce|quem fez você|quem desenvolveu voce|quem desenvolveu você/.test(n))return"Meu criador é o Jheymison. 🚀";if(/qual (e|é) seu nome|quem e voce|quem é voce|quem e você|quem é você/.test(n))return"Eu sou a Adaptra.AI 🤖, sua assistente virtual.";return null}
+
+function casualIntent(n){
+  const patterns=[
+    /^(oi|ola|olá|oie|eai|e ai|bom dia|boa tarde|boa noite)[!. ]*$/,
+    /^(tudo bem|tudo bom|como voce esta|como vc esta|como você está|como vc ta|como voce ta)[?! .]*$/,
+    /^(obrigado|obrigada|valeu|vlw|thanks)[!. ]*$/,
+    /^(tchau|ate mais|até mais|falou)[!. ]*$/,
+    /^(quem e voce|quem é voce|quem e você|quem é você)[?! .]*$/,
+    /^(o que voce faz|o que você faz)[?! .]*$/
+  ];
+  return patterns.some(r=>r.test(n));
+}
+function casualReply(n){
+  if(/^(oi|ola|olá|oie|eai|e ai|bom dia|boa tarde|boa noite)/.test(n)) return "Olá! 👋 Tudo certo por aqui. O que você quer fazer hoje?";
+  if(/tudo bem|tudo bom|como voce esta|como vc esta|como você está|como vc ta|como voce ta/.test(n)) return "Tudo ótimo por aqui 😄 E com você, tudo bem?";
+  if(/obrigado|obrigada|valeu|vlw|thanks/.test(n)) return "Por nada! 😄 Estou aqui para ajudar.";
+  if(/tchau|ate mais|até mais|falou/.test(n)) return "Até mais! 👋 Quando quiser, é só voltar.";
+  if(/quem e voce|quem é voce|quem e você|quem é você/.test(n)) return "Eu sou a Adaptra.AI 🤖, sua assistente virtual.";
+  return "Posso conversar, explicar coisas, ajudar com ideias e também pesquisar na Web quando você quiser.";
+}
+async function webSearch(q){const u="https://pt.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch="+encodeURIComponent(q)+"&gsrlimit="+(deepMode?5:3)+"&prop=extracts&exintro=1&explaintext=1&format=json&origin=*";const r=await fetch(u);if(!r.ok)throw Error();const d=await r.json(),pages=d?.query?.pages?Object.values(d.query.pages).filter(x=>x.extract):[];if(!pages.length)throw Error();const text=pages.map(x=>x.extract.trim().split(/(?<=[.!?])\s+/).slice(0,2).join(" ")).join(" ");return "🌐 "+text+"<div class=\"source\">Fonte consultada: Wikipedia • "+pages.map(x=>esc(x.title)).join(" • ")+"</div>"}
+async function generate(q){
+  if(!generator)return null;
+  const mem=Object.entries(memory).slice(-20).map(([k,v])=>"- "+k+": "+v).join("\n");const ph=projectHistory().messages.slice(-8).map(x=>x.role+": "+x.content).join("\n");
+  const system=`Você é a Adaptra.AI, uma assistente brasileira.
+Personalidade atual: ${personality}.
+Converse de forma natural, simpática e humana.
+IMPORTANTE: perguntas de conversa casual devem receber conversa casual, não pesquisa.
+Não transforme "Tudo bem?", "Oi", "Como você está?" ou frases semelhantes em pesquisa.
+Responda em português do Brasil.
+Se a pergunta for simples, responda em 1 a 3 frases.
+Não invente fatos. Se não souber, diga que não sabe.
+${mem?"Memória salva:\n"+mem:""}
+Projeto atual: ${currentProject}
+${ph?"Contexto recente:\n"+ph:""}`;
+  const m=[{role:"system",content:system}];
+  history.slice(-8).forEach(x=>m.push(x));
+  m.push({role:"user",content:q});
+  const o=await generator(m,{max_new_tokens:220,do_sample:true,temperature:.7,top_p:.9,repetition_penalty:1.08});
+  const g=o?.[0]?.generated_text;
+  let a=Array.isArray(g)?g[g.length-1]?.content:g;
+  a=shortText(a,q);
+  history.push({role:"user",content:q},{role:"assistant",content:a});
+  if(history.length>10)history.splice(0,2);
+  return a;
+}
+function wantsWeb(n){
+  if(webMode)return true;
+  return /(^|\s)(pesquise|pesquisar|pesquisa|procure|procurar|busque|buscar|na web|na internet|noticias|notícias|preco atual|preço atual|cotacao|cotação|agora|hoje|atualmente|últimas notícias|ultimas noticias)(\s|$)/.test(n);
+}
+function smartRule(q,n){
+  if(/(criar|fazer|desenvolver|montar).*(jogo|game)/.test(n) || /jogo/.test(n)){
+    const hasRpg=/rpg|mmorpg|aventura/.test(n), has2d=/2d|pixel/.test(n);
+    return `🎮 Claro! Vamos criar ${has2d?"um jogo 2D em pixel art":"um jogo"}${hasRpg?" de RPG":""}. Podemos começar definindo <b>nome, estilo, mapa, personagem, inimigos, combate e progressão</b>. Se quiser, eu monto a primeira versão passo a passo com você.`;
+  }
+  if(/consegue fazer|pode fazer|da pra fazer|dá pra fazer/.test(n)) return "Consigo sim. 😄 Me diga o que você quer construir e eu vou dividir em etapas e fazer cada parte com você.";
+  if(/como funciona|como voce funciona|como você funciona/.test(n)) return "Eu funciono em camadas: conversa e memória local, ferramentas da interface e, quando ativada, pesquisa na Web. Se o cérebro local não carregar, a Adaptra continua usando respostas de segurança em vez de travar.";
+  if(/o que podemos fazer|oq podemos fazer|o que da pra fazer|o que dá pra fazer/.test(n)) return "Podemos conversar, planejar projetos, criar código, estudar, organizar ideias, pesquisar na Web e trabalhar em projetos separados. 🚀";
+  if(/me ajuda|pode me ajudar|preciso de ajuda/.test(n)) return "Claro! 👍 Me diga o objetivo e, se houver mais de uma etapa, eu organizo tudo para você.";
+  if(/qual versao|qual versão/.test(n)) return "Esta é a Adaptra.AI 3.3. Nesta versão estamos melhorando principalmente conversa, contexto, memória, projetos e pesquisa.";
+  return null;
+}
+async function answer(q){const n=norm(q);const id=identityAnswer(n);if(id)return id;if(casualIntent(n))return casualReply(n);const rule=smartRule(q,n);if(rule)return rule;if(memory[n])return"🧠 "+memory[n];if(/^lembre|^lembra|^guarde/.test(n)){const fact=q.replace(/^(lembre-se de|lembre de|lembra de|guarde)/i,"").trim();if(fact){memory["note:"+Date.now()]=fact;save();return"🧠 Lembrei disso."}}const c=calc(q);if(c)return c;if(n.startsWith("aprenda:")){const p=q.slice(8).split("|");if(p.length<2)return"Use: aprenda: pergunta | resposta";memory[norm(p[0])]=p.slice(1).join("|").trim();save();return"🧠 Aprendi e salvei."}if(wantsWeb(n)){try{return await webSearch(q)}catch{}}
+const local=await generate(q);if(local)return local;
+const recent=history.filter(x=>x.role==="user").slice(-2).map(x=>x.content).join(" ");
+if(recent && /jogo|rpg|projeto|código|codigo/.test(norm(recent)+" "+n)) return "Sim, vamos continuar. 🚀 Eu entendi que estamos trabalhando nisso. Diga qual parte você quer fazer agora e eu continuo a partir daqui.";
+return "Entendi. 😊 Posso conversar com você e ajudar a transformar essa ideia em etapas. O que você quer fazer agora?"}
+async function sendMsg(q=input.value.trim()){
+  if(!q||busy)return;
+  add(esc(q),"user");input.value="";input.style.height="auto";busy=true;send.disabled=true;
+  const t=add('<span class="dots">Pensando <span>•</span><span>•</span><span>•</span></span>');
+  try{
+    const a=await answer(q);t.textContent="";
+    let i=0;const timer=setInterval(()=>{t.textContent+=a.charAt(i++);chat.scrollTop=chat.scrollHeight;if(i>=a.length)clearInterval(timer)},7);
+    last=a;
+    projectHistory().messages.push({role:"user",content:q},{role:"assistant",content:clean(a)});
+    if(projectHistory().messages.length>30)projectHistory().messages.splice(0,2);saveProjects();
+  }catch{t.textContent="Não consegui responder. Tente novamente."}
+  busy=false;send.disabled=false;input.focus();
+}
+send.onclick=()=>sendMsg();
+input.addEventListener("input",()=>{input.style.height="auto";input.style.height=Math.min(input.scrollHeight,130)+"px"});
+input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMsg()}});
+document.querySelector("#web").onclick=()=>{
+  webMode=!webMode;document.querySelector("#web").classList.toggle("active",webMode);
+  add(webMode?"🌐 Modo Web ativado. Agora posso pesquisar quando você enviar uma pergunta.":"🧠 Modo Web desativado. Vamos conversar normalmente.","info");
+};
+document.querySelector("#local").onclick=()=>{webMode=false;document.querySelector("#web").classList.remove("active");add("🧠 Modo Adaptra ativado. Conversa normal e cérebro local.","info")};
+document.querySelector("#teach").onclick=()=>{
+  const q=prompt("O que devo aprender?");if(!q)return;
+  const a=prompt("Qual é a resposta?");if(!a)return;
+  memory[norm(q)]=a;save();add("🧠 Aprendi e salvei isso na memória.","info");
+};
+document.querySelector("#memory").onclick=()=>add(Object.keys(memory).length?`💾 Tenho ${Object.keys(memory).length} conhecimento(s) salvo(s).`:"💾 Minha memória está vazia.","info");
+document.querySelector("#speak").onclick=()=>{if(!("speechSynthesis"in window)||!last)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(last);u.lang="pt-BR";u.rate=.88;u.pitch=1;speechSynthesis.speak(u)};
+document.querySelector("#voice").onclick=()=>{
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){add("🎙️ Seu navegador não oferece reconhecimento de voz.","info");return}
+  const r=new SR();r.lang="pt-BR";r.interimResults=false;r.onresult=e=>{input.value=e.results[0][0].transcript;input.dispatchEvent(new Event("input"));sendMsg()};r.start();
+};
+document.querySelector("#menuBtn").onclick=()=>menu.classList.toggle("show");
+document.querySelector("#newChat").onclick=()=>{history=[];document.querySelectorAll(".msgrow").forEach(x=>x.remove());add("✨ Novo chat iniciado. Como posso ajudar?","info");menu.classList.remove("show")};
+document.querySelector("#clearMemory").onclick=()=>{if(confirm("Apagar toda a memória da Adaptra?")){memory={};save();add("🧠 Memória apagada.","info")}menu.classList.remove("show")};
+document.querySelector("#personalityBtn").onclick=()=>{
+  const p=prompt("Personalidade: Amigável, Casual, Professor, Profissional ou Criativa.",personality);
+  if(p){personality=p;add("🎭 Personalidade alterada para: "+esc(personality)+".","info")}menu.classList.remove("show")
+};
+
+document.querySelector("#newProject").onclick=()=>{const n=prompt("Nome do novo projeto:");if(n)selectProject(n.trim())};
+document.querySelector("#projectCurrent").onclick=()=>selectProject("Geral");
+document.querySelector("#memoryView").onclick=()=>{const a=Object.entries(memory).slice(-20);add(a.length?"📚 <b>Memória</b><br>"+a.map(([k,v])=>esc(k)+": "+esc(v)).join("<br>"):"📚 Minha memória está vazia.","info");menu.classList.remove("show")};
+document.querySelector("#deepSearch").onclick=()=>{deepMode=!deepMode;document.querySelector("#deepSearch").textContent=deepMode?"🔬 Pesquisa profunda: ON":"🔬 Pesquisa profunda";add(deepMode?"🔬 Pesquisa profunda ativada.":"⚡ Pesquisa rápida ativada.","info");menu.classList.remove("show")};
+renderProjects();
+add("3.3 pronta. 💜 Agora frases como <b>“Tudo bem?”</b> ficam na conversa normal e não viram pesquisa.","info");
+(async()=>{
+  try{
+    status.textContent="● carregando cérebro local";
+    const gpu="gpu"in navigator;
+    generator=await pipeline("text-generation",MODEL,{device:gpu?"webgpu":"wasm",dtype:gpu?"q4f16":"q4"});
+    status.textContent=gpu?"● ONLINE • WebGPU":"● ONLINE • CPU";
+    add("🧠 Cérebro local pronto.","info");
+  }catch(e){
+    console.warn(e);status.textContent="● modo conversa";
+    add("🌙 O cérebro local não terminou de carregar. A conversa básica continua funcionando.","info");
+  }
+})();
+</script>
+</body>
+</html>
