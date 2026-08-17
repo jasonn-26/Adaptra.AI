@@ -1,0 +1,4039 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#060914">
+
+<title>Adaptra.AI 3.6</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+  --bg:#060914;
+  --panel:#0d1423;
+  --panel2:#111b2d;
+  --border:#263650;
+  --text:#f5f7ff;
+  --muted:#8996aa;
+  --blue:#536dff;
+  --purple:#8b5cf6;
+  --green:#35d58a;
+  --red:#ff5571;
+}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+button,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  width:100%;
+  height:100dvh;
+  max-width:1000px;
+  margin:auto;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+
+  background:
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(83,109,255,.18),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 100% 15%,
+      rgba(139,92,246,.14),
+      transparent 30%
+    ),
+    var(--bg);
+}
+
+/* ================= HEADER ================= */
+
+.header{
+  height:68px;
+  flex:0 0 68px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:
+    max(8px,env(safe-area-inset-top))
+    12px
+    8px;
+
+  background:rgba(6,9,20,.88);
+  border-bottom:1px solid rgba(255,255,255,.06);
+
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+
+  z-index:10;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+
+.logo{
+  width:43px;
+  height:43px;
+  flex:0 0 43px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:14px;
+
+  font-size:20px;
+  font-weight:950;
+
+  color:#fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #536dff,
+      #8b5cf6
+    );
+
+  box-shadow:
+    0 8px 30px rgba(83,109,255,.3);
+}
+
+.brand-name{
+  font-size:16px;
+  font-weight:900;
+}
+
+.brand-name b{
+  color:#8090ff;
+}
+
+.version{
+  color:#64738a;
+  font-size:9px;
+  margin-left:3px;
+}
+
+.status{
+  margin-top:2px;
+  font-size:10px;
+  font-weight:700;
+  color:#8996aa;
+}
+
+.header-actions{
+  display:flex;
+  gap:7px;
+}
+
+.icon-btn{
+  width:40px;
+  height:40px;
+
+  border:1px solid var(--border);
+  border-radius:13px;
+
+  background:#111b2d;
+  color:#fff;
+
+  display:grid;
+  place-items:center;
+
+  font-size:17px;
+}
+
+.icon-btn:active{
+  transform:scale(.94);
+}
+
+/* ================= CHAT ================= */
+
+.chat{
+  flex:1;
+  min-height:0;
+
+  overflow-y:auto;
+  overflow-x:hidden;
+
+  padding:
+    18px
+    12px
+    180px;
+
+  scroll-behavior:smooth;
+}
+
+.chat::-webkit-scrollbar{
+  width:4px;
+}
+
+.chat::-webkit-scrollbar-thumb{
+  background:#263650;
+  border-radius:20px;
+}
+
+/* ================= WELCOME ================= */
+
+.welcome{
+  max-width:720px;
+  margin:12px auto 25px;
+
+  padding:22px;
+
+  border-radius:25px;
+
+  border:1px solid rgba(110,130,255,.18);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(20,30,52,.95),
+      rgba(9,14,26,.96)
+    );
+
+  box-shadow:
+    0 25px 70px rgba(0,0,0,.25);
+}
+
+.welcome-top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.welcome-icon{
+  width:47px;
+  height:47px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(83,109,255,.2),
+      rgba(139,92,246,.2)
+    );
+
+  font-size:22px;
+}
+
+.welcome h1{
+  margin:0;
+  font-size:23px;
+}
+
+.welcome h1 span{
+  color:#8291ff;
+}
+
+.welcome p{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.55;
+  margin:12px 0 0;
+}
+
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+  margin-top:18px;
+}
+
+.quick{
+  padding:13px;
+
+  border:1px solid #263650;
+  border-radius:16px;
+
+  text-align:left;
+
+  background:#0e1829;
+  color:#dce4f3;
+
+  transition:.15s;
+}
+
+.quick:hover{
+  border-color:#536dff;
+}
+
+.quick:active{
+  transform:scale(.98);
+}
+
+.quick strong{
+  display:block;
+  margin-top:4px;
+}
+
+.quick small{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+}
+
+/* ================= MESSAGES ================= */
+
+.message-row{
+  display:flex;
+  gap:8px;
+
+  width:100%;
+
+  margin:14px 0;
+
+  animation:
+    messageIn .18s ease-out;
+}
+
+.message-row.user{
+  justify-content:flex-end;
+}
+
+.avatar{
+  width:35px;
+  height:35px;
+  min-width:35px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:12px;
+
+  font-weight:900;
+
+  background:
+    linear-gradient(
+      135deg,
+      #536dff,
+      #8b5cf6
+    );
+
+  box-shadow:
+    0 7px 22px rgba(83,109,255,.18);
+}
+
+.user .avatar{
+  order:2;
+}
+
+.bubble{
+  max-width:min(82%,700px);
+
+  padding:12px 14px;
+
+  border-radius:18px;
+
+  border:1px solid rgba(255,255,255,.06);
+
+  background:
+    linear-gradient(
+      145deg,
+      #121d30,
+      #0e1727
+    );
+
+  color:#f0f4ff;
+
+  line-height:1.55;
+  font-size:15px;
+
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.12);
+}
+
+.ai .bubble{
+  border-top-left-radius:7px;
+}
+
+.user .bubble{
+  border-top-right-radius:7px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #4b68ed,
+      #7459e9
+    );
+}
+
+@keyframes messageIn{
+  from{
+    opacity:0;
+    transform:translateY(6px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* ================= THINKING ================= */
+
+.thinking{
+  display:flex;
+  align-items:center;
+  gap:4px;
+
+  width:max-content;
+  padding:2px;
+}
+
+.thinking span{
+  width:6px;
+  height:6px;
+
+  border-radius:50%;
+
+  background:#8292ff;
+
+  animation:
+    thinking 1.1s infinite ease-in-out;
+}
+
+.thinking span:nth-child(2){
+  animation-delay:.15s;
+}
+
+.thinking span:nth-child(3){
+  animation-delay:.3s;
+}
+
+@keyframes thinking{
+  0%,70%,100%{
+    opacity:.25;
+    transform:translateY(0);
+  }
+
+  35%{
+    opacity:1;
+    transform:translateY(-4px);
+  }
+}
+
+/* ================= IMAGE ================= */
+
+.generated-image{
+  display:block;
+
+  width:100%;
+  max-width:520px;
+
+  margin-top:9px;
+
+  border-radius:17px;
+
+  border:1px solid rgba(255,255,255,.1);
+
+  box-shadow:
+    0 18px 55px rgba(0,0,0,.4);
+}
+
+/* ================= COMPOSER ================= */
+
+.composer-wrap{
+  position:fixed;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  z-index:30;
+
+  pointer-events:none;
+}
+
+.composer{
+  width:min(1000px,100%);
+  margin:auto;
+
+  padding:
+    8px
+    10px
+    max(9px,env(safe-area-inset-bottom));
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(6,9,20,.99),
+      rgba(6,9,20,.9),
+      transparent
+    );
+
+  pointer-events:auto;
+}
+
+.composer-box{
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+
+  padding:7px;
+
+  border-radius:22px;
+
+  border:1px solid #293852;
+
+  background:#0c1220;
+
+  box-shadow:
+    0 15px 50px rgba(0,0,0,.4);
+}
+
+.attach-btn,
+.voice-btn,
+.send-btn{
+  width:43px;
+  height:43px;
+  min-width:43px;
+
+  border-radius:15px;
+
+  border:1px solid #27364e;
+
+  display:grid;
+  place-items:center;
+
+  color:#eaf0ff;
+}
+
+.attach-btn,
+.voice-btn{
+  background:#142036;
+}
+
+.send-btn{
+  border:0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #536dff,
+      #8b5cf6
+    );
+
+  font-size:18px;
+}
+
+.send-btn.stop{
+  background:var(--red);
+}
+
+textarea{
+  flex:1;
+  min-width:0;
+
+  min-height:43px;
+  max-height:130px;
+
+  padding:11px 5px;
+
+  border:0;
+  outline:0;
+  resize:none;
+
+  background:transparent;
+
+  color:white;
+
+  font-size:15px;
+  line-height:21px;
+
+  overflow-y:auto;
+}
+
+textarea::placeholder{
+  color:#718096;
+}
+
+.tools{
+  display:flex;
+  gap:6px;
+
+  margin-top:7px;
+
+  overflow-x:auto;
+
+  scrollbar-width:none;
+}
+
+.tools::-webkit-scrollbar{
+  display:none;
+}
+
+.tool{
+  flex:0 0 auto;
+
+  padding:7px 10px;
+
+  border-radius:12px;
+
+  border:1px solid #202d43;
+
+  background:#0f192b;
+
+  color:#99a6bb;
+
+  font-size:11px;
+}
+
+.tool.active{
+  color:#e4eaff;
+
+  border-color:#536dff;
+
+  background:#18264b;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+  position:fixed;
+
+  left:50%;
+  bottom:110px;
+
+  transform:
+    translate(-50%,15px);
+
+  max-width:90%;
+
+  padding:10px 14px;
+
+  border-radius:13px;
+
+  border:1px solid #2b3a54;
+
+  background:#111b2c;
+
+  color:#e3e9f6;
+
+  font-size:12px;
+
+  opacity:0;
+
+  pointer-events:none;
+
+  transition:.2s;
+
+  z-index:100;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+/* ================= MENU ================= */
+
+.menu-bg{
+  position:fixed;
+  inset:0;
+
+  background:rgba(0,0,0,.55);
+
+  display:none;
+
+  z-index:70;
+}
+
+.menu-bg.open{
+  display:block;
+}
+
+.menu{
+  position:fixed;
+
+  left:0;
+  top:0;
+  bottom:0;
+
+  width:min(320px,88vw);
+
+  padding:
+    max(18px,env(safe-area-inset-top))
+    16px;
+
+  background:
+    linear-gradient(
+      160deg,
+      #0d1627,
+      #080e1a
+    );
+
+  border-right:1px solid #22304a;
+
+  transform:translateX(-105%);
+
+  transition:.25s;
+
+  z-index:80;
+
+  box-shadow:
+    15px 0 60px rgba(0,0,0,.35);
+}
+
+.menu.open{
+  transform:translateX(0);
+}
+
+.menu-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  margin-bottom:20px;
+}
+
+.menu-title{
+  font-size:20px;
+  font-weight:900;
+}
+
+.menu-item{
+  width:100%;
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  padding:13px;
+
+  margin:5px 0;
+
+  border:0;
+
+  border-radius:13px;
+
+  background:transparent;
+
+  color:#dce4f4;
+
+  text-align:left;
+}
+
+.menu-item:hover{
+  background:#142037;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:600px){
+
+  .header{
+    height:64px;
+    flex-basis:64px;
+  }
+
+  .logo{
+    width:38px;
+    height:38px;
+    min-width:38px;
+  }
+
+  .brand-name{
+    font-size:15px;
+  }
+
+  .chat{
+    padding:
+      14px
+      9px
+      180px;
+  }
+
+  .welcome{
+    padding:18px;
+    border-radius:22px;
+  }
+
+  .welcome h1{
+    font-size:21px;
+  }
+
+  .bubble{
+    max-width:88%;
+  }
+
+  .composer{
+    padding-left:7px;
+    padding-right:7px;
+  }
+}
+
+@media(max-width:390px){
+
+  .quick-grid{
+    grid-template-columns:1fr;
+  }
+
+  .bubble{
+    max-width:91%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+
+  <div class="brand">
+
+    <div class="logo">
+      A
+    </div>
+
+    <div>
+
+      <div class="brand-name">
+        Adaptra<b>.AI</b>
+        <span class="version">
+          3.6
+        </span>
+      </div>
+
+      <div
+        class="status"
+        id="status">
+        ● conectando
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="header-actions">
+
+    <button
+      class="icon-btn"
+      id="newChat">
+      ＋
+    </button>
+
+    <button
+      class="icon-btn"
+      id="menuBtn">
+      ☰
+    </button>
+
+  </div>
+
+</header>
+
+
+<!-- ================= CHAT ================= -->
+
+<main
+  class="chat"
+  id="chat">
+
+  <section
+    class="welcome"
+    id="welcome">
+
+    <div class="welcome-top">
+
+      <div class="welcome-icon">
+        ✨
+      </div>
+
+      <div>
+
+        <h1>
+          Olá, <span>Jheymison</span> 👋
+        </h1>
+
+      </div>
+
+    </div>
+
+    <p>
+      Eu sou a Adaptra.AI 3.6.
+      Posso conversar, ajudar com programação,
+      projetos, ideias e criar imagens.
+    </p>
+
+    <div class="quick-grid">
+
+      <button
+        class="quick"
+        data-msg="Quero criar um projeto novo.">
+        🚀
+        <strong>Criar projeto</strong>
+        <small>Começar uma ideia</small>
+      </button>
+
+      <button
+        class="quick"
+        data-msg="Me ajude a criar um jogo 2D.">
+        🎮
+        <strong>Criar jogo</strong>
+        <small>Desenvolvimento</small>
+      </button>
+
+      <button
+        class="quick"
+        data-msg="Explique programação de forma simples.">
+        💻
+        <strong>Programar</strong>
+        <small>Ajuda com código</small>
+      </button>
+
+      <button
+        class="quick"
+        data-msg="Me dê ideias para um projeto.">
+        💡
+        <strong>Ideias</strong>
+        <small>Brainstorm</small>
+      </button>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- ================= COMPOSER ================= -->
+
+<div class="composer-wrap">
+
+  <div class="composer">
+
+    <div class="composer-box">
+
+      <button
+        class="attach-btn"
+        id="attachBtn">
+        ＋
+      </button>
+
+      <textarea
+        id="input"
+        rows="1"
+        placeholder="Converse com a Adaptra..."
+        autocomplete="off"></textarea>
+
+      <button
+        class="voice-btn"
+        id="voiceBtn">
+        🎤
+      </button>
+
+      <button
+        class="send-btn"
+        id="sendBtn">
+        ➤
+      </button>
+
+    </div>
+
+
+    <div class="tools">
+
+      <button
+        class="tool active"
+        id="chatMode">
+        🧠 Adaptra
+      </button>
+
+      <button
+        class="tool"
+        id="imageMode">
+        🎨 Imagem
+      </button>
+
+      <button
+        class="tool"
+        id="memoryBtn">
+        💾 Memória
+      </button>
+
+      <button
+        class="tool"
+        id="teachBtn">
+        🧠 Ensinar
+      </button>
+
+      <button
+        class="tool"
+        id="webBtn">
+        🌐 Web
+      </button>
+
+      <button
+        class="tool"
+        id="speakBtn">
+        🔊 Falar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ================= MENU ================= -->
+
+<div
+  class="menu-bg"
+  id="menuBg">
+</div>
+
+<aside
+  class="menu"
+  id="menu">
+
+  <div class="menu-header">
+
+    <div class="menu-title">
+      🤖 Adaptra.AI
+    </div>
+
+    <button
+      class="icon-btn"
+      id="closeMenu">
+      ×
+    </button>
+
+  </div>
+
+  <button
+    class="menu-item"
+    id="menuNew">
+    💬 Nova conversa
+  </button>
+
+  <button
+    class="menu-item"
+    id="menuMemory">
+    🧠 Memória
+  </button>
+
+  <button
+    class="menu-item"
+    id="menuCreator">
+    👤 Sobre o criador
+  </button>
+
+  <button
+    class="menu-item"
+    id="menuStatus">
+    🟢 Testar backend
+  </button>
+
+</aside>
+
+
+<div
+  class="toast"
+  id="toast">
+</div>
+
+</div>
+
+
+<script>
+"use strict";
+
+/* =========================================================
+   CONFIGURAÇÃO
+========================================================= */
+
+const API =
+  "https://adaptra-backend.onrender.com";
+
+const HISTORY_KEY =
+  "adaptra36_history";
+
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const $ =
+  id => document.getElementById(id);
+
+const chat =
+  $("chat");
+
+const input =
+  $("input");
+
+const sendBtn =
+  $("sendBtn");
+
+const status =
+  $("status");
+
+const toast =
+  $("toast");
+
+const menu =
+  $("menu");
+
+const menuBg =
+  $("menuBg");
+
+
+/* =========================================================
+   ESTADO
+========================================================= */
+
+let busy =
+  false;
+
+let controller =
+  null;
+
+let imageMode =
+  false;
+
+let lastReply =
+  "";
+
+
+let history =
+  loadHistory();
+
+
+/* =========================================================
+   HISTÓRICO
+========================================================= */
+
+function loadHistory(){
+
+  try{
+
+    const data =
+      localStorage.getItem(
+        HISTORY_KEY
+      );
+
+    return data
+      ? JSON.parse(data)
+      : [];
+
+  }catch{
+
+    return [];
+
+  }
+
+}
+
+
+function saveHistory(){
+
+  try{
+
+    localStorage.setItem(
+      HISTORY_KEY,
+      JSON.stringify(
+        history.slice(-40)
+      )
+    );
+
+  }catch{}
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(text){
+
+  toast.textContent =
+    text;
+
+  toast.classList.add(
+    "show"
+  );
+
+  clearTimeout(
+    showToast.timer
+  );
+
+  showToast.timer =
+    setTimeout(
+      () =>
+        toast.classList.remove(
+          "show"
+        ),
+      2500
+    );
+
+}
+
+
+/* =========================================================
+   SCROLL
+========================================================= */
+
+function scrollBottom(){
+
+  requestAnimationFrame(
+    () => {
+
+      chat.scrollTo({
+        top:
+          chat.scrollHeight,
+        behavior:
+          "smooth"
+      });
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+input.addEventListener(
+  "input",
+  () => {
+
+    input.style.height =
+      "auto";
+
+    input.style.height =
+      Math.min(
+        input.scrollHeight,
+        130
+      ) + "px";
+
+  }
+);
+
+
+/* =========================================================
+   ADICIONAR MENSAGEM
+========================================================= */
+
+function addMessage(
+  text,
+  type="ai"
+){
+
+  const row =
+    document.createElement(
+      "div"
+    );
+
+  row.className =
+    "message-row " +
+    type;
+
+
+  const avatar =
+    document.createElement(
+      "div"
+    );
+
+  avatar.className =
+    "avatar";
+
+  avatar.textContent =
+    type === "user"
+      ? "J"
+      : "A";
+
+
+  const bubble =
+    document.createElement(
+      "div"
+    );
+
+  bubble.className =
+    "bubble";
+
+  bubble.textContent =
+    text;
+
+
+  row.appendChild(
+    avatar
+  );
+
+  row.appendChild(
+    bubble
+  );
+
+  chat.appendChild(
+    row
+  );
+
+  scrollBottom();
+
+  return {
+    row,
+    bubble
+  };
+
+}
+
+
+/* =========================================================
+   ANIMAÇÃO DE PENSAMENTO
+========================================================= */
+
+function addThinking(){
+
+  const row =
+    document.createElement(
+      "div"
+    );
+
+  row.className =
+    "message-row ai";
+
+
+  const avatar =
+    document.createElement(
+      "div"
+    );
+
+  avatar.className =
+    "avatar";
+
+  avatar.textContent =
+    "A";
+
+
+  const bubble =
+    document.createElement(
+      "div"
+    );
+
+  bubble.className =
+    "bubble";
+
+
+  const dots =
+    document.createElement(
+      "div"
+    );
+
+  dots.className =
+    "thinking";
+
+
+  for(
+    let i = 0;
+    i < 3;
+    i++
+  ){
+
+    dots.appendChild(
+      document.createElement(
+        "span"
+      )
+    );
+
+  }
+
+
+  bubble.appendChild(
+    dots
+  );
+
+  row.appendChild(
+    avatar
+  );
+
+  row.appendChild(
+    bubble
+  );
+
+  chat.appendChild(
+    row
+  );
+
+  scrollBottom();
+
+  return row;
+
+}
+
+
+/* =========================================================
+   BACKEND
+========================================================= */
+
+async function checkBackend(){
+
+  try{
+
+    const response =
+      await fetch(
+        API + "/health",
+        {
+          cache:"no-store"
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    status.textContent =
+      "● ONLINE";
+
+    status.style.color =
+      "var(--green)";
+
+
+    console.log(
+      "Adaptra:",
+      data
+    );
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    status.textContent =
+      "● OFFLINE";
+
+    status.style.color =
+      "var(--red)";
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+async function chatWithAI(
+  message
+){
+
+  controller =
+    new AbortController();
+
+
+  const response =
+    await fetch(
+      API + "/chat",
+      {
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify({
+
+            message:
+
+              message,
+
+            history:
+              history.slice(-10),
+
+            conversationId:
+              "adaptra-main"
+
+          }),
+
+        signal:
+          controller.signal
+
+      }
+    );
+
+
+  const raw =
+    await response.text();
+
+
+  let data;
+
+  try{
+
+    data =
+      raw
+        ? JSON.parse(raw)
+        : {};
+
+  }catch{
+
+    throw new Error(
+      "Backend não retornou JSON."
+    );
+
+  }
+
+
+  if(!response.ok){
+
+    throw new Error(
+      data?.error ||
+      "Erro HTTP " +
+      response.status
+    );
+
+  }
+
+
+  const reply =
+    String(
+      data.reply ||
+      data.response ||
+      ""
+    ).trim();
+
+
+  if(!reply){
+
+    throw new Error(
+      "A IA não retornou resposta."
+    );
+
+  }
+
+
+  return reply;
+
+}
+
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#060914">
+
+<title>Adaptra.AI 3.6</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+  --bg:#060914;
+  --panel:#0d1423;
+  --panel2:#111b2d;
+  --border:#263650;
+  --text:#f5f7ff;
+  --muted:#8996aa;
+  --blue:#536dff;
+  --purple:#8b5cf6;
+  --green:#35d58a;
+  --red:#ff5571;
+}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+button,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  width:100%;
+  height:100dvh;
+  max-width:1000px;
+  margin:auto;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+
+  background:
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(83,109,255,.18),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 100% 15%,
+      rgba(139,92,246,.14),
+      transparent 30%
+    ),
+    var(--bg);
+}
+
+/* ================= HEADER ================= */
+
+.header{
+  height:68px;
+  flex:0 0 68px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:
+    max(8px,env(safe-area-inset-top))
+    12px
+    8px;
+
+  background:rgba(6,9,20,.88);
+  border-bottom:1px solid rgba(255,255,255,.06);
+
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+
+  z-index:10;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+
+.logo{
+  width:43px;
+  height:43px;
+  flex:0 0 43px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:14px;
+
+  font-size:20px;
+  font-weight:950;
+
+  color:#fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      #536dff,
+      #8b5cf6
+    );
+
+  box-shadow:
+    0 8px 30px rgba(83,109,255,.3);
+}
+
+.brand-name{
+  font-size:16px;
+  font-weight:900;
+}
+
+.brand-name b{
+  color:#8090ff;
+}
+
+.version{
+  color:#64738a;
+  font-size:9px;
+  margin-left:3px;
+}
+
+.status{
+  margin-top:2px;
+  font-size:10px;
+  font-weight:700;
+  color:#8996aa;
+}
+
+.header-actions{
+  display:flex;
+  gap:7px;
+}
+
+.icon-btn{
+  width:40px;
+  height:40px;
+
+  border:1px solid var(--border);
+  border-radius:13px;
+
+  background:#111b2d;
+  color:#fff;
+
+  display:grid;
+  place-items:center;
+
+  font-size:17px;
+}
+
+.icon-btn:active{
+  transform:scale(.94);
+}
+
+/* ================= CHAT ================= */
+
+.chat{
+  flex:1;
+  min-height:0;
+
+  overflow-y:auto;
+  overflow-x:hidden;
+
+  padding:
+    18px
+    12px
+    180px;
+
+  scroll-behavior:smooth;
+}
+
+.chat::-webkit-scrollbar{
+  width:4px;
+}
+
+.chat::-webkit-scrollbar-thumb{
+  background:#263650;
+  border-radius:20px;
+}
+
+/* ================= WELCOME ================= */
+
+.welcome{
+  max-width:720px;
+  margin:12px auto 25px;
+
+  padding:22px;
+
+  border-radius:25px;
+
+  border:1px solid rgba(110,130,255,.18);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(20,30,52,.95),
+      rgba(9,14,26,.96)
+    );
+
+  box-shadow:
+    0 25px 70px rgba(0,0,0,.25);
+}
+
+.welcome-top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.welcome-icon{
+  width:47px;
+  height:47px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(83,109,255,.2),
+      rgba(139,92,246,.2)
+    );
+
+  font-size:22px;
+}
+
+.welcome h1{
+  margin:0;
+  font-size:23px;
+}
+
+.welcome h1 span{
+  color:#8291ff;
+}
+
+.welcome p{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.55;
+  margin:12px 0 0;
+}
+
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+  margin-top:18px;
+}
+
+.quick{
+  padding:13px;
+
+  border:1px solid #263650;
+  border-radius:16px;
+
+  text-align:left;
+
+  background:#0e1829;
+  color:#dce4f3;
+
+  transition:.15s;
+}
+
+.quick:hover{
+  border-color:#536dff;
+}
+
+.quick:active{
+  transform:scale(.98);
+}
+
+.quick strong{
+  display:block;
+  margin-top:4px;
+}
+
+.quick small{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+}
+
+/* ================= MESSAGES ================= */
+
+.message-row{
+  display:flex;
+  gap:8px;
+
+  width:100%;
+
+  margin:14px 0;
+
+  animation:
+    messageIn .18s ease-out;
+}
+
+.message-row.user{
+  justify-content:flex-end;
+}
+
+.avatar{
+  width:35px;
+  height:35px;
+  min-width:35px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:12px;
+
+  font-weight:900;
+
+  background:
+    linear-gradient(
+      135deg,
+      #536dff,
+      #8b5cf6
+    );
+
+  box-shadow:
+    0 7px 22px rgba(83,109,255,.18);
+}
+
+.user .avatar{
+  order:2;
+}
+
+.bubble{
+  max-width:min(82%,700px);
+
+  padding:12px 14px;
+
+  border-radius:18px;
+
+  border:1px solid rgba(255,255,255,.06);
+
+  background:
+    linear-gradient(
+      145deg,
+      #121d30,
+      #0e1727
+    );
+
+  color:#f0f4ff;
+
+  line-height:1.55;
+  font-size:15px;
+
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.12);
+}
+
+.ai .bubble{
+  border-top-left-radius:7px;
+}
+
+.user .bubble{
+  border-top-right-radius:7px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #4b68ed,
+      #7459e9
+    );
+}
+
+@keyframes messageIn{
+  from{
+    opacity:0;
+    transform:translateY(6px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* ================= THINKING ================= */
+
+.thinking{
+  display:flex;
+  align-items:center;
+  gap:4px;
+
+  width:max-content;
+  padding:2px;
+}
+
+.thinking span{
+  width:6px;
+  height:6px;
+
+  border-radius:50%;
+
+  background:#8292ff;
+
+  animation:
+    thinking 1.1s infinite ease-in-out;
+}
+
+.thinking span:nth-child(2){
+  animation-delay:.15s;
+}
+
+.thinking span:nth-child(3){
+  animation-delay:.3s;
+}
+
+@keyframes thinking{
+  0%,70%,100%{
+    opacity:.25;
+    transform:translateY(0);
+  }
+
+  35%{
+    opacity:1;
+    transform:translateY(-4px);
+  }
+}
+
+/* ================= IMAGE ================= */
+
+.generated-image{
+  display:block;
+
+  width:100%;
+  max-width:520px;
+
+  margin-top:9px;
+
+  border-radius:17px;
+
+  border:1px solid rgba(255,255,255,.1);
+
+  box-shadow:
+    0 18px 55px rgba(0,0,0,.4);
+}
+
+/* ================= COMPOSER ================= */
+
+.composer-wrap{
+  position:fixed;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  z-index:30;
+
+  pointer-events:none;
+}
+
+.composer{
+  width:min(1000px,100%);
+  margin:auto;
+
+  padding:
+    8px
+    10px
+    max(9px,env(safe-area-inset-bottom));
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(6,9,20,.99),
+      rgba(6,9,20,.9),
+      transparent
+    );
+
+  pointer-events:auto;
+}
+
+.composer-box{
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+
+  padding:7px;
+
+  border-radius:22px;
+
+  border:1px solid #293852;
+
+  background:#0c1220;
+
+  box-shadow:
+    0 15px 50px rgba(0,0,0,.4);
+}
+
+.attach-btn,
+.voice-btn,
+.send-btn{
+  width:43px;
+  height:43px;
+  min-width:43px;
+
+  border-radius:15px;
+
+  border:1px solid #27364e;
+
+  display:grid;
+  place-items:center;
+
+  color:#eaf0ff;
+}
+
+.attach-btn,
+.voice-btn{
+  background:#142036;
+}
+
+.send-btn{
+  border:0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #536dff,
+      #8b5cf6
+    );
+
+  font-size:18px;
+}
+
+.send-btn.stop{
+  background:var(--red);
+}
+
+textarea{
+  flex:1;
+  min-width:0;
+
+  min-height:43px;
+  max-height:130px;
+
+  padding:11px 5px;
+
+  border:0;
+  outline:0;
+  resize:none;
+
+  background:transparent;
+
+  color:white;
+
+  font-size:15px;
+  line-height:21px;
+
+  overflow-y:auto;
+}
+
+textarea::placeholder{
+  color:#718096;
+}
+
+.tools{
+  display:flex;
+  gap:6px;
+
+  margin-top:7px;
+
+  overflow-x:auto;
+
+  scrollbar-width:none;
+}
+
+.tools::-webkit-scrollbar{
+  display:none;
+}
+
+.tool{
+  flex:0 0 auto;
+
+  padding:7px 10px;
+
+  border-radius:12px;
+
+  border:1px solid #202d43;
+
+  background:#0f192b;
+
+  color:#99a6bb;
+
+  font-size:11px;
+}
+
+.tool.active{
+  color:#e4eaff;
+
+  border-color:#536dff;
+
+  background:#18264b;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+  position:fixed;
+
+  left:50%;
+  bottom:110px;
+
+  transform:
+    translate(-50%,15px);
+
+  max-width:90%;
+
+  padding:10px 14px;
+
+  border-radius:13px;
+
+  border:1px solid #2b3a54;
+
+  background:#111b2c;
+
+  color:#e3e9f6;
+
+  font-size:12px;
+
+  opacity:0;
+
+  pointer-events:none;
+
+  transition:.2s;
+
+  z-index:100;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+/* ================= MENU ================= */
+
+.menu-bg{
+  position:fixed;
+  inset:0;
+
+  background:rgba(0,0,0,.55);
+
+  display:none;
+
+  z-index:70;
+}
+
+.menu-bg.open{
+  display:block;
+}
+
+.menu{
+  position:fixed;
+
+  left:0;
+  top:0;
+  bottom:0;
+
+  width:min(320px,88vw);
+
+  padding:
+    max(18px,env(safe-area-inset-top))
+    16px;
+
+  background:
+    linear-gradient(
+      160deg,
+      #0d1627,
+      #080e1a
+    );
+
+  border-right:1px solid #22304a;
+
+  transform:translateX(-105%);
+
+  transition:.25s;
+
+  z-index:80;
+
+  box-shadow:
+    15px 0 60px rgba(0,0,0,.35);
+}
+
+.menu.open{
+  transform:translateX(0);
+}
+
+.menu-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  margin-bottom:20px;
+}
+
+.menu-title{
+  font-size:20px;
+  font-weight:900;
+}
+
+.menu-item{
+  width:100%;
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  padding:13px;
+
+  margin:5px 0;
+
+  border:0;
+
+  border-radius:13px;
+
+  background:transparent;
+
+  color:#dce4f4;
+
+  text-align:left;
+}
+
+.menu-item:hover{
+  background:#142037;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:600px){
+
+  .header{
+    height:64px;
+    flex-basis:64px;
+  }
+
+  .logo{
+    width:38px;
+    height:38px;
+    min-width:38px;
+  }
+
+  .brand-name{
+    font-size:15px;
+  }
+
+  .chat{
+    padding:
+      14px
+      9px
+      180px;
+  }
+
+  .welcome{
+    padding:18px;
+    border-radius:22px;
+  }
+
+  .welcome h1{
+    font-size:21px;
+  }
+
+  .bubble{
+    max-width:88%;
+  }
+
+  .composer{
+    padding-left:7px;
+    padding-right:7px;
+  }
+}
+
+@media(max-width:390px){
+
+  .quick-grid{
+    grid-template-columns:1fr;
+  }
+
+  .bubble{
+    max-width:91%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+
+  <div class="brand">
+
+    <div class="logo">
+      A
+    </div>
+
+    <div>
+
+      <div class="brand-name">
+        Adaptra<b>.AI</b>
+        <span class="version">
+          3.6
+        </span>
+      </div>
+
+      <div
+        class="status"
+        id="status">
+        ● conectando
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="header-actions">
+
+    <button
+      class="icon-btn"
+      id="newChat">
+      ＋
+    </button>
+
+    <button
+      class="icon-btn"
+      id="menuBtn">
+      ☰
+    </button>
+
+  </div>
+
+</header>
+
+
+<!-- ================= CHAT ================= -->
+
+<main
+  class="chat"
+  id="chat">
+
+  <section
+    class="welcome"
+    id="welcome">
+
+    <div class="welcome-top">
+
+      <div class="welcome-icon">
+        ✨
+      </div>
+
+      <div>
+
+        <h1>
+          Olá, <span>Jheymison</span> 👋
+        </h1>
+
+      </div>
+
+    </div>
+
+    <p>
+      Eu sou a Adaptra.AI 3.6.
+      Posso conversar, ajudar com programação,
+      projetos, ideias e criar imagens.
+    </p>
+
+    <div class="quick-grid">
+
+      <button
+        class="quick"
+        data-msg="Quero criar um projeto novo.">
+        🚀
+        <strong>Criar projeto</strong>
+        <small>Começar uma ideia</small>
+      </button>
+
+      <button
+        class="quick"
+        data-msg="Me ajude a criar um jogo 2D.">
+        🎮
+        <strong>Criar jogo</strong>
+        <small>Desenvolvimento</small>
+      </button>
+
+      <button
+        class="quick"
+        data-msg="Explique programação de forma simples.">
+        💻
+        <strong>Programar</strong>
+        <small>Ajuda com código</small>
+      </button>
+
+      <button
+        class="quick"
+        data-msg="Me dê ideias para um projeto.">
+        💡
+        <strong>Ideias</strong>
+        <small>Brainstorm</small>
+      </button>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- ================= COMPOSER ================= -->
+
+<div class="composer-wrap">
+
+  <div class="composer">
+
+    <div class="composer-box">
+
+      <button
+        class="attach-btn"
+        id="attachBtn">
+        ＋
+      </button>
+
+      <textarea
+        id="input"
+        rows="1"
+        placeholder="Converse com a Adaptra..."
+        autocomplete="off"></textarea>
+
+      <button
+        class="voice-btn"
+        id="voiceBtn">
+        🎤
+      </button>
+
+      <button
+        class="send-btn"
+        id="sendBtn">
+        ➤
+      </button>
+
+    </div>
+
+
+    <div class="tools">
+
+      <button
+        class="tool active"
+        id="chatMode">
+        🧠 Adaptra
+      </button>
+
+      <button
+        class="tool"
+        id="imageMode">
+        🎨 Imagem
+      </button>
+
+      <button
+        class="tool"
+        id="memoryBtn">
+        💾 Memória
+      </button>
+
+      <button
+        class="tool"
+        id="teachBtn">
+        🧠 Ensinar
+      </button>
+
+      <button
+        class="tool"
+        id="webBtn">
+        🌐 Web
+      </button>
+
+      <button
+        class="tool"
+        id="speakBtn">
+        🔊 Falar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ================= MENU ================= -->
+
+<div
+  class="menu-bg"
+  id="menuBg">
+</div>
+
+<aside
+  class="menu"
+  id="menu">
+
+  <div class="menu-header">
+
+    <div class="menu-title">
+      🤖 Adaptra.AI
+    </div>
+
+    <button
+      class="icon-btn"
+      id="closeMenu">
+      ×
+    </button>
+
+  </div>
+
+  <button
+    class="menu-item"
+    id="menuNew">
+    💬 Nova conversa
+  </button>
+
+  <button
+    class="menu-item"
+    id="menuMemory">
+    🧠 Memória
+  </button>
+
+  <button
+    class="menu-item"
+    id="menuCreator">
+    👤 Sobre o criador
+  </button>
+
+  <button
+    class="menu-item"
+    id="menuStatus">
+    🟢 Testar backend
+  </button>
+
+</aside>
+
+
+<div
+  class="toast"
+  id="toast">
+</div>
+
+</div>
+
+
+<script>
+"use strict";
+
+/* =========================================================
+   CONFIGURAÇÃO
+========================================================= */
+
+const API =
+  "https://adaptra-backend.onrender.com";
+
+const HISTORY_KEY =
+  "adaptra36_history";
+
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const $ =
+  id => document.getElementById(id);
+
+const chat =
+  $("chat");
+
+const input =
+  $("input");
+
+const sendBtn =
+  $("sendBtn");
+
+const status =
+  $("status");
+
+const toast =
+  $("toast");
+
+const menu =
+  $("menu");
+
+const menuBg =
+  $("menuBg");
+
+
+/* =========================================================
+   ESTADO
+========================================================= */
+
+let busy =
+  false;
+
+let controller =
+  null;
+
+let imageMode =
+  false;
+
+let lastReply =
+  "";
+
+
+let history =
+  loadHistory();
+
+
+/* =========================================================
+   HISTÓRICO
+========================================================= */
+
+function loadHistory(){
+
+  try{
+
+    const data =
+      localStorage.getItem(
+        HISTORY_KEY
+      );
+
+    return data
+      ? JSON.parse(data)
+      : [];
+
+  }catch{
+
+    return [];
+
+  }
+
+}
+
+
+function saveHistory(){
+
+  try{
+
+    localStorage.setItem(
+      HISTORY_KEY,
+      JSON.stringify(
+        history.slice(-40)
+      )
+    );
+
+  }catch{}
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(text){
+
+  toast.textContent =
+    text;
+
+  toast.classList.add(
+    "show"
+  );
+
+  clearTimeout(
+    showToast.timer
+  );
+
+  showToast.timer =
+    setTimeout(
+      () =>
+        toast.classList.remove(
+          "show"
+        ),
+      2500
+    );
+
+}
+
+
+/* =========================================================
+   SCROLL
+========================================================= */
+
+function scrollBottom(){
+
+  requestAnimationFrame(
+    () => {
+
+      chat.scrollTo({
+        top:
+          chat.scrollHeight,
+        behavior:
+          "smooth"
+      });
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+input.addEventListener(
+  "input",
+  () => {
+
+    input.style.height =
+      "auto";
+
+    input.style.height =
+      Math.min(
+        input.scrollHeight,
+        130
+      ) + "px";
+
+  }
+);
+
+
+/* =========================================================
+   ADICIONAR MENSAGEM
+========================================================= */
+
+function addMessage(
+  text,
+  type="ai"
+){
+
+  const row =
+    document.createElement(
+      "div"
+    );
+
+  row.className =
+    "message-row " +
+    type;
+
+
+  const avatar =
+    document.createElement(
+      "div"
+    );
+
+  avatar.className =
+    "avatar";
+
+  avatar.textContent =
+    type === "user"
+      ? "J"
+      : "A";
+
+
+  const bubble =
+    document.createElement(
+      "div"
+    );
+
+  bubble.className =
+    "bubble";
+
+  bubble.textContent =
+    text;
+
+
+  row.appendChild(
+    avatar
+  );
+
+  row.appendChild(
+    bubble
+  );
+
+  chat.appendChild(
+    row
+  );
+
+  scrollBottom();
+
+  return {
+    row,
+    bubble
+  };
+
+}
+
+
+/* =========================================================
+   ANIMAÇÃO DE PENSAMENTO
+========================================================= */
+
+function addThinking(){
+
+  const row =
+    document.createElement(
+      "div"
+    );
+
+  row.className =
+    "message-row ai";
+
+
+  const avatar =
+    document.createElement(
+      "div"
+    );
+
+  avatar.className =
+    "avatar";
+
+  avatar.textContent =
+    "A";
+
+
+  const bubble =
+    document.createElement(
+      "div"
+    );
+
+  bubble.className =
+    "bubble";
+
+
+  const dots =
+    document.createElement(
+      "div"
+    );
+
+  dots.className =
+    "thinking";
+
+
+  for(
+    let i = 0;
+    i < 3;
+    i++
+  ){
+
+    dots.appendChild(
+      document.createElement(
+        "span"
+      )
+    );
+
+  }
+
+
+  bubble.appendChild(
+    dots
+  );
+
+  row.appendChild(
+    avatar
+  );
+
+  row.appendChild(
+    bubble
+  );
+
+  chat.appendChild(
+    row
+  );
+
+  scrollBottom();
+
+  return row;
+
+}
+
+
+/* =========================================================
+   BACKEND
+========================================================= */
+
+async function checkBackend(){
+
+  try{
+
+    const response =
+      await fetch(
+        API + "/health",
+        {
+          cache:"no-store"
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    status.textContent =
+      "● ONLINE";
+
+    status.style.color =
+      "var(--green)";
+
+
+    console.log(
+      "Adaptra:",
+      data
+    );
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    status.textContent =
+      "● OFFLINE";
+
+    status.style.color =
+      "var(--red)";
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+async function chatWithAI(
+  message
+){
+
+  controller =
+    new AbortController();
+
+
+  const response =
+    await fetch(
+      API + "/chat",
+      {
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify({
+
+            message:
+
+              message,
+
+            history:
+              history.slice(-10),
+
+            conversationId:
+              "adaptra-main"
+
+          }),
+
+        signal:
+          controller.signal
+
+      }
+    );
+
+
+  const raw =
+    await response.text();
+
+
+  let data;
+
+  try{
+
+    data =
+      raw
+        ? JSON.parse(raw)
+        : {};
+
+  }catch{
+
+    throw new Error(
+      "Backend não retornou JSON."
+    );
+
+  }
+
+
+  if(!response.ok){
+
+    throw new Error(
+      data?.error ||
+      "Erro HTTP " +
+      response.status
+    );
+
+  }
+
+
+  const reply =
+    String(
+      data.reply ||
+      data.response ||
+      ""
+    ).trim();
+
+
+  if(!reply){
+
+    throw new Error(
+      "A IA não retornou resposta."
+    );
+
+  }
+
+
+  return reply;
+
+}
+
+
+/* =========================================================
+   IMAGEM
+========================================================= */
+
+async function generateImage(
+  prompt
+){
+
+  controller =
+    new AbortController();
+
+
+  const response =
+    await fetch(
+      API + "/generate",
+      {
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify({
+
+            prompt:
+              prompt
+
+          }),
+
+        signal:
+          controller.signal
+
+      }
+    );
+
+
+  if(!response.ok){
+
+    const text =
+      await response.text();
+
+    let error =
+      text;
+
+    try{
+
+      const json =
+        JSON.parse(text);
+
+      error =
+        json.error ||
+        text;
+
+    }catch{}
+
+
+    throw new Error(
+      error ||
+      "Erro HTTP " +
+      response.status
+    );
+
+  }
+
+
+  const contentType =
+    response.headers.get(
+      "content-type"
+    ) || "";
+
+
+  if(
+    !contentType.includes(
+      "image"
+    )
+  ){
+
+    const text =
+      await response.text();
+
+    throw new Error(
+      text ||
+      "O servidor não retornou uma imagem."
+    );
+
+  }
+
+
+  const blob =
+    await response.blob();
+
+
+  if(!blob.size){
+
+    throw new Error(
+      "Imagem vazia."
+    );
+
+  }
+
+
+  return URL.createObjectURL(
+    blob
+  );
+
+}
+
+
+/* =========================================================
+   ENVIAR
+========================================================= */
+
+async function sendMessage(){
+
+  const message =
+    input.value.trim();
+
+
+  if(!message){
+
+    return;
+
+  }
+
+
+  if(busy){
+
+    if(controller){
+
+      controller.abort();
+
+    }
+
+    return;
+
+  }
+
+
+  input.value = "";
+
+  input.style.height =
+    "auto";
+
+
+  const welcome =
+    $("welcome");
+
+  if(welcome){
+
+    welcome.remove();
+
+  }
+
+
+  addMessage(
+    message,
+    "user"
+  );
+
+
+  history.push({
+
+    role:"user",
+
+    content:
+      message
+
+  });
+
+  saveHistory();
+
+
+  busy =
+    true;
+
+  sendBtn.classList.add(
+    "stop"
+  );
+
+  sendBtn.textContent =
+    "■";
+
+
+  const thinking =
+    addThinking();
+
+
+  try{
+
+    if(imageMode){
+
+      const imageUrl =
+        await generateImage(
+          message
+        );
+
+
+      thinking.remove();
+
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+      row.className =
+        "message-row ai";
+
+
+      const avatar =
+        document.createElement(
+          "div"
+        );
+
+      avatar.className =
+        "avatar";
+
+      avatar.textContent =
+        "A";
+
+
+      const bubble =
+        document.createElement(
+          "div"
+        );
+
+      bubble.className =
+        "bubble";
+
+
+      const title =
+        document.createElement(
+          "div"
+        );
+
+      title.textContent =
+        "🎨 Imagem criada";
+
+      title.style.fontWeight =
+        "800";
+
+      title.style.marginBottom =
+        "8px";
+
+
+      const img =
+        document.createElement(
+          "img"
+        );
+
+      img.src =
+        imageUrl;
+
+      img.className =
+        "generated-image";
+
+      img.alt =
+        "Imagem gerada pela Adaptra.AI";
+
+
+      bubble.appendChild(
+        title
+      );
+
+      bubble.appendChild(
+        img
+      );
+
+      row.appendChild(
+        avatar
+      );
+
+      row.appendChild(
+        bubble
+      );
+
+      chat.appendChild(
+        row
+      );
+
+      scrollBottom();
+
+
+    }else{
+
+      const reply =
+        await chatWithAI(
+          message
+        );
+
+
+      thinking.remove();
+
+
+      addMessage(
+        reply,
+        "ai"
+      );
+
+
+      lastReply =
+        reply;
+
+
+      history.push({
+
+        role:"assistant",
+
+        content:
+          reply
+
+      });
+
+      saveHistory();
+
+    }
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+
+    thinking.remove();
+
+
+    if(
+      error.name ===
+      "AbortError"
+    ){
+
+      addMessage(
+        "Geração cancelada.",
+        "ai"
+      );
+
+    }else{
+
+      addMessage(
+        "❌ " +
+        error.message,
+        "ai"
+      );
+
+    }
+
+
+  }finally{
+
+    busy =
+      false;
+
+    controller =
+      null;
+
+    sendBtn.classList.remove(
+      "stop"
+    );
+
+    sendBtn.textContent =
+      "➤";
+
+  }
+
+}
+
+
+/* =========================================================
+   ENTER
+========================================================= */
+
+input.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key ===
+      "Enter" &&
+      !event.shiftKey
+    ){
+
+      event.preventDefault();
+
+      sendMessage();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   BOTÃO ENVIAR
+========================================================= */
+
+sendBtn.addEventListener(
+  "click",
+  sendMessage
+);
+
+
+/* =========================================================
+   MODO IMAGEM
+========================================================= */
+
+$("imageMode").addEventListener(
+  "click",
+  () => {
+
+    imageMode =
+      true;
+
+    $("imageMode")
+      .classList.add(
+        "active"
+      );
+
+    $("chatMode")
+      .classList.remove(
+        "active"
+      );
+
+    input.placeholder =
+      "Descreva a imagem que deseja criar...";
+
+    showToast(
+      "🎨 Modo imagem ativado"
+    );
+
+  }
+);
+
+
+/* =========================================================
+   MODO CHAT
+========================================================= */
+
+$("chatMode").addEventListener(
+  "click",
+  () => {
+
+    imageMode =
+      false;
+
+    $("chatMode")
+      .classList.add(
+        "active"
+      );
+
+    $("imageMode")
+      .classList.remove(
+        "active"
+      );
+
+    input.placeholder =
+      "Converse com a Adaptra...";
+
+    showToast(
+      "🧠 Modo Adaptra ativado"
+    );
+
+  }
+);
+
+
+/* =========================================================
+   BOTÕES RÁPIDOS
+========================================================= */
+
+document
+  .querySelectorAll(
+    ".quick"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          input.value =
+            button.dataset.msg;
+
+          input.focus();
+
+          sendMessage();
+
+        }
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   NOVA CONVERSA
+========================================================= */
+
+function newChat(){
+
+  if(
+    !confirm(
+      "Começar uma nova conversa?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  history = [];
+
+  localStorage.removeItem(
+    HISTORY_KEY
+  );
+
+
+  chat.innerHTML = `
+
+    <section
+      class="welcome"
+      id="welcome">
+
+      <div class="welcome-top">
+
+        <div class="welcome-icon">
+          ✨
+        </div>
+
+        <div>
+
+          <h1>
+            Nova conversa 👋
+          </h1>
+
+        </div>
+
+      </div>
+
+      <p>
+        Como posso ajudar você hoje?
+      </p>
+
+    </section>
+
+  `;
+
+  showToast(
+    "Nova conversa criada."
+  );
+
+}
+
+
+$("newChat").addEventListener(
+  "click",
+  newChat
+);
+
+$("menuNew").addEventListener(
+  "click",
+  () => {
+
+    closeMenu();
+
+    newChat();
+
+  }
+);
+
+
+/* =========================================================
+   MENU
+========================================================= */
+
+function openMenu(){
+
+  menu.classList.add(
+    "open"
+  );
+
+  menuBg.classList.add(
+    "open"
+  );
+
+}
+
+function closeMenu(){
+
+  menu.classList.remove(
+    "open"
+  );
+
+  menuBg.classList.remove(
+    "open"
+  );
+
+}
+
+$("menuBtn").addEventListener(
+  "click",
+  openMenu
+);
+
+$("closeMenu").addEventListener(
+  "click",
+  closeMenu
+);
+
+menuBg.addEventListener(
+  "click",
+  closeMenu
+);
+
+
+/* =========================================================
+   TESTAR BACKEND
+========================================================= */
+
+$("menuStatus").addEventListener(
+  "click",
+  async () => {
+
+    closeMenu();
+
+    showToast(
+      "Testando backend..."
+    );
+
+    const online =
+      await checkBackend();
+
+    showToast(
+      online
+        ? "🟢 Backend online!"
+        : "🔴 Backend offline."
+    );
+
+  }
+);
+
+
+/* =========================================================
+   MEMÓRIA
+========================================================= */
+
+$("memoryBtn").addEventListener(
+  "click",
+  () => {
+
+    showToast(
+      "💾 Memória será sincronizada pelo backend."
+    );
+
+  }
+);
+
+$("menuMemory").addEventListener(
+  "click",
+  () => {
+
+    closeMenu();
+
+    showToast(
+      "🧠 Sistema de memória ativo."
+    );
+
+  }
+);
+
+
+/* =========================================================
+   ENSINAR
+========================================================= */
+
+$("teachBtn").addEventListener(
+  "click",
+  () => {
+
+    input.value =
+      "Quero ensinar algo para você: ";
+
+    input.focus();
+
+  }
+);
+
+
+/* =========================================================
+   WEB
+========================================================= */
+
+$("webBtn").addEventListener(
+  "click",
+  () => {
+
+    showToast(
+      "🌐 Pesquisa web será adicionada em uma próxima versão."
+    );
+
+  }
+);
+
+
+/* =========================================================
+   FALAR
+========================================================= */
+
+$("speakBtn").addEventListener(
+  "click",
+  () => {
+
+    if(!lastReply){
+
+      showToast(
+        "Ainda não existe uma resposta para falar."
+      );
+
+      return;
+
+    }
+
+
+    if(
+      !("speechSynthesis" in window)
+    ){
+
+      showToast(
+        "Seu navegador não suporta voz."
+      );
+
+      return;
+
+    }
+
+
+    speechSynthesis.cancel();
+
+
+    const utterance =
+      new SpeechSynthesisUtterance(
+        lastReply
+      );
+
+    utterance.lang =
+      "pt-BR";
+
+    utterance.rate =
+      1;
+
+    speechSynthesis.speak(
+      utterance
+    );
+
+  }
+);
+
+
+/* =========================================================
+   MICROFONE
+========================================================= */
+
+$("voiceBtn").addEventListener(
+  "click",
+  () => {
+
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+
+    if(!SpeechRecognition){
+
+      showToast(
+        "Reconhecimento de voz não disponível."
+      );
+
+      return;
+
+    }
+
+
+    const recognition =
+      new SpeechRecognition();
+
+    recognition.lang =
+      "pt-BR";
+
+    recognition.interimResults =
+      false;
+
+    recognition.maxAlternatives =
+      1;
+
+
+    recognition.onstart =
+      () => {
+
+        showToast(
+          "🎤 Ouvindo..."
+        );
+
+      };
+
+
+    recognition.onresult =
+      event => {
+
+        const text =
+          event.results[0][0].transcript;
+
+        input.value =
+          text;
+
+        input.focus();
+
+      };
+
+
+    recognition.onerror =
+      () => {
+
+        showToast(
+          "Não consegui reconhecer sua voz."
+        );
+
+      };
+
+
+    recognition.start();
+
+  }
+);
+
+
+/* =========================================================
+   ANEXO
+========================================================= */
+
+$("attachBtn").addEventListener(
+  "click",
+  () => {
+
+    showToast(
+      "📎 Anexos serão adicionados em uma próxima versão."
+    );
+
+  }
+);
+
+
+/* =========================================================
+   SOBRE
+========================================================= */
+
+$("menuCreator").addEventListener(
+  "click",
+  () => {
+
+    closeMenu();
+
+    addMessage(
+      "A Adaptra.AI é um projeto criado para ser uma inteligência artificial brasileira, com chat, geração de imagens, memória e ferramentas para projetos.",
+      "ai"
+    );
+
+  }
+);
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+checkBackend();
+
+
+console.log(
+  "Adaptra.AI 3.6 carregada."
+);
+
+</script>
+
+</body>
+</html>
