@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
+>
+
+<meta
+  name="theme-color"
+  content="#060914"
+>
+
+<title>Recuperar senha — Adaptra.AI</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+  --bg:#060914;
+  --panel:#0d1424;
+  --panel2:#121c30;
+  --border:#263651;
+  --text:#f5f7ff;
+  --muted:#8d9ab0;
+  --blue:#536dff;
+  --purple:#8b5cf6;
+  --green:#35d58a;
+  --red:#ff5571;
+}
+
+html,
+body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+body{
+  min-height:100dvh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  overflow:auto;
+
+  background:
+    radial-gradient(
+      circle at 20% 10%,
+      rgba(83,109,255,.18),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 85% 85%,
+      rgba(139,92,246,.16),
+      transparent 35%
+    ),
+    var(--bg);
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.page{
+  width:100%;
+  max-width:430px;
+}
+
+.brand{
+  text-align:center;
+  margin-bottom:22px;
+}
+
+.logo{
+  width:62px;
+  height:62px;
+  margin:0 auto 12px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:20px;
+
+  font-size:29px;
+  font-weight:950;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--blue),
+      var(--purple)
+    );
+
+  box-shadow:
+    0 15px 45px rgba(83,109,255,.3);
+}
+
+.brand h1{
+  margin:0;
+  font-size:25px;
+  font-weight:900;
+}
+
+.brand h1 span{
+  color:#8291ff;
+}
+
+.brand p{
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.card{
+  padding:22px;
+
+  border:1px solid rgba(120,140,255,.16);
+  border-radius:25px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(17,27,47,.96),
+      rgba(9,14,26,.98)
+    );
+
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.38);
+
+  backdrop-filter:blur(18px);
+}
+
+.card-icon{
+  width:48px;
+  height:48px;
+
+  display:grid;
+  place-items:center;
+
+  margin-bottom:15px;
+
+  border-radius:16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(83,109,255,.2),
+      rgba(139,92,246,.2)
+    );
+
+  border:1px solid rgba(120,140,255,.15);
+
+  font-size:22px;
+}
+
+.card h2{
+  margin:0;
+  font-size:20px;
+}
+
+.card-description{
+  margin:8px 0 20px;
+
+  color:var(--muted);
+
+  font-size:13px;
+  line-height:1.55;
+}
+
+.field{
+  margin-bottom:14px;
+}
+
+.field label{
+  display:block;
+
+  margin-bottom:7px;
+
+  color:#cbd5e7;
+
+  font-size:12px;
+  font-weight:700;
+}
+
+.input-wrap{
+  position:relative;
+}
+
+.input-wrap input{
+  width:100%;
+
+  height:48px;
+
+  padding:
+    0 13px;
+
+  border:1px solid var(--border);
+  border-radius:14px;
+
+  outline:none;
+
+  background:
+    rgba(7,12,23,.85);
+
+  color:white;
+
+  transition:
+    border-color .18s,
+    box-shadow .18s;
+}
+
+.input-wrap input:focus{
+  border-color:var(--blue);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(83,109,255,.12);
+}
+
+.input-wrap input::placeholder{
+  color:#647188;
+}
+
+.password-wrap input{
+  padding-right:52px;
+}
+
+.show-password{
+  position:absolute;
+
+  right:7px;
+  top:7px;
+
+  width:34px;
+  height:34px;
+
+  border:0;
+  border-radius:10px;
+
+  background:#151f33;
+
+  color:#b9c5da;
+}
+
+.primary{
+  width:100%;
+  height:49px;
+
+  margin-top:5px;
+
+  border:0;
+  border-radius:15px;
+
+  color:white;
+
+  font-weight:800;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--blue),
+      var(--purple)
+    );
+
+  box-shadow:
+    0 10px 28px
+    rgba(83,109,255,.2);
+
+  transition:
+    transform .15s,
+    opacity .15s;
+}
+
+.primary:active{
+  transform:scale(.98);
+}
+
+.primary:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+.back{
+  width:100%;
+
+  margin-top:12px;
+
+  padding:12px;
+
+  border:1px solid var(--border);
+  border-radius:14px;
+
+  background:#111a2c;
+
+  color:#cbd5e7;
+
+  font-weight:700;
+}
+
+.notice{
+  display:none;
+
+  margin-bottom:15px;
+
+  padding:11px 12px;
+
+  border-radius:13px;
+
+  font-size:12px;
+  line-height:1.45;
+}
+
+.notice.show{
+  display:block;
+}
+
+.notice.error{
+  color:#ffd7de;
+  background:rgba(255,85,113,.1);
+  border:1px solid rgba(255,85,113,.22);
+}
+
+.notice.success{
+  color:#caffea;
+  background:rgba(53,213,138,.09);
+  border:1px solid rgba(53,213,138,.2);
+}
+
+.step{
+  display:none;
+}
+
+.step.active{
+  display:block;
+}
+
+.recovery-key{
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.success-screen{
+  text-align:center;
+  padding:8px 0 2px;
+}
+
+.success-icon{
+  width:64px;
+  height:64px;
+
+  display:grid;
+  place-items:center;
+
+  margin:0 auto 14px;
+
+  border-radius:50%;
+
+  background:
+    rgba(53,213,138,.12);
+
+  border:1px solid
+    rgba(53,213,138,.25);
+
+  color:var(--green);
+
+  font-size:28px;
+}
+
+.footer{
+  text-align:center;
+
+  margin-top:18px;
+
+  color:#5f6d84;
+
+  font-size:10px;
+}
+
+.security{
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+
+  margin-top:16px;
+
+  padding:10px;
+
+  border-radius:12px;
+
+  background:#0b1220;
+
+  color:#748198;
+
+  font-size:10px;
+  line-height:1.45;
+}
+
+.security-icon{
+  font-size:13px;
+}
+
+@media(max-width:430px){
+
+  body{
+    padding:14px;
+    align-items:flex-start;
+    padding-top:30px;
+  }
+
+  .card{
+    padding:18px;
+    border-radius:22px;
+  }
+
+  .brand{
+    margin-bottom:17px;
+  }
+
+  .logo{
+    width:56px;
+    height:56px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <div class="brand">
+
+    <div class="logo">
+      A
+    </div>
+
+    <h1>
+      Adaptra<span>.AI</span>
+    </h1>
+
+    <p>
+      Recuperação de conta · versão 4.4
+    </p>
+
+  </div>
+
+
+  <div class="card">
+
+    <!-- =====================================================
+         ETAPA 1
+    ====================================================== -->
+
+    <section
+      class="step active"
+      id="step1"
+    >
+
+      <div class="card-icon">
+        🔐
+      </div>
+
+      <h2>
+        Recuperar senha
+      </h2>
+
+      <p class="card-description">
+        Informe seu nome de usuário e sua
+        chave de recuperação para continuar.
+      </p>
+
+
+      <div
+        class="notice"
+        id="notice1"
+      ></div>
+
+
+      <div class="field">
+
+        <label for="username">
+          Nome de usuário
+        </label>
+
+        <div class="input-wrap">
+
+          <input
+            id="username"
+            type="text"
+            maxlength="32"
+            autocomplete="username"
+            placeholder="Digite seu usuário"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="recoveryKey">
+          Chave de recuperação
+        </label>
+
+        <div class="input-wrap">
+
+          <input
+            id="recoveryKey"
+            class="recovery-key"
+            type="text"
+            maxlength="32"
+            autocomplete="off"
+            placeholder="ADP-XXXX-XXXX-XXXX"
+          >
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="primary"
+        id="verifyBtn"
+      >
+        Verificar chave
+      </button>
+
+
+      <button
+        class="back"
+        id="backBtn"
+      >
+        ← Voltar para Adaptra.AI
+      </button>
+
+
+      <div class="security">
+
+        <div class="security-icon">
+          🛡️
+        </div>
+
+        <div>
+          A recuperação é validada pelo
+          servidor. Nunca coloque tokens ou
+          senhas diretamente neste arquivo.
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ETAPA 2
+    ====================================================== -->
+
+    <section
+      class="step"
+      id="step2"
+    >
+
+      <div class="card-icon">
+        🔑
+      </div>
+
+      <h2>
+        Criar nova senha
+      </h2>
+
+      <p class="card-description">
+        A chave foi validada. Agora escolha
+        uma nova senha para sua conta.
+      </p>
+
+
+      <div
+        class="notice"
+        id="notice2"
+      ></div>
+
+
+      <div class="field">
+
+        <label for="newPassword">
+          Nova senha
+        </label>
+
+        <div class="input-wrap password-wrap">
+
+          <input
+            id="newPassword"
+            type="password"
+            minlength="8"
+            maxlength="128"
+            autocomplete="new-password"
+            placeholder="Mínimo de 8 caracteres"
+          >
+
+          <button
+            type="button"
+            class="show-password"
+            data-target="newPassword"
+          >
+            👁
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="confirmPassword">
+          Confirmar nova senha
+        </label>
+
+        <div class="input-wrap password-wrap">
+
+          <input
+            id="confirmPassword"
+            type="password"
+            minlength="8"
+            maxlength="128"
+            autocomplete="new-password"
+            placeholder="Digite novamente"
+          >
+
+          <button
+            type="button"
+            class="show-password"
+            data-target="confirmPassword"
+          >
+            👁
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="primary"
+        id="resetBtn"
+      >
+        Alterar senha
+      </button>
+
+    </section>
+
+
+    <!-- =====================================================
+         ETAPA 3
+    ====================================================== -->
+
+    <section
+      class="step"
+      id="step3"
+    >
+
+      <div class="success-screen">
+
+        <div class="success-icon">
+          ✓
+        </div>
+
+        <h2>
+          Senha alterada!
+        </h2>
+
+        <p class="card-description">
+          Sua senha foi atualizada com sucesso.
+          A chave de recuperação utilizada foi
+          invalidada.
+        </p>
+
+        <button
+          class="primary"
+          id="loginBtn"
+        >
+          Entrar na Adaptra.AI
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <div class="footer">
+    Adaptra.AI · Sistema de recuperação 4.4
+  </div>
+
+</div>
+
+
+<script>
+"use strict";
+
+/* =========================================================
+   CONFIGURAÇÃO
+========================================================= */
+
+const API =
+  "https://adaptra-backend.onrender.com";
+
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const username =
+  document.getElementById(
+    "username"
+  );
+
+const recoveryKey =
+  document.getElementById(
+    "recoveryKey"
+  );
+
+const newPassword =
+  document.getElementById(
+    "newPassword"
+  );
+
+const confirmPassword =
+  document.getElementById(
+    "confirmPassword"
+  );
+
+const verifyBtn =
+  document.getElementById(
+    "verifyBtn"
+  );
+
+const resetBtn =
+  document.getElementById(
+    "resetBtn"
+  );
+
+const step1 =
+  document.getElementById(
+    "step1"
+  );
+
+const step2 =
+  document.getElementById(
+    "step2"
+  );
+
+const step3 =
+  document.getElementById(
+    "step3"
+  );
+
+const notice1 =
+  document.getElementById(
+    "notice1"
+  );
+
+const notice2 =
+  document.getElementById(
+    "notice2"
+  );
+
+
+/* =========================================================
+   ESTADO
+========================================================= */
+
+let recoveryToken =
+  null;
+
+
+/* =========================================================
+   AVISO
+========================================================= */
+
+function showNotice(
+  element,
+  message,
+  type="error"
+){
+
+  element.textContent =
+    message;
+
+  element.className =
+    "notice show " +
+    type;
+
+}
+
+
+/* =========================================================
+   LIMPAR AVISO
+========================================================= */
+
+function clearNotice(
+  element
+){
+
+  element.textContent =
+    "";
+
+  element.className =
+    "notice";
+
+}
+
+
+/* =========================================================
+   TROCAR ETAPA
+========================================================= */
+
+function showStep(
+  number
+){
+
+  step1.classList.remove(
+    "active"
+  );
+
+  step2.classList.remove(
+    "active"
+  );
+
+  step3.classList.remove(
+    "active"
+  );
+
+  if(number === 1){
+    step1.classList.add(
+      "active"
+    );
+  }
+
+  if(number === 2){
+    step2.classList.add(
+      "active"
+    );
+  }
+
+  if(number === 3){
+    step3.classList.add(
+      "active"
+    );
+  }
+
+}
+
+
+/* =========================================================
+   VERIFICAR CHAVE
+========================================================= */
+
+verifyBtn.addEventListener(
+  "click",
+  async () => {
+
+    clearNotice(
+      notice1
+    );
+
+    const user =
+      username.value.trim();
+
+    const key =
+      recoveryKey.value
+        .trim()
+        .toUpperCase();
+
+    if(!user){
+
+      showNotice(
+        notice1,
+        "Digite seu nome de usuário."
+      );
+
+      username.focus();
+
+      return;
+    }
+
+    if(!key){
+
+      showNotice(
+        notice1,
+        "Digite sua chave de recuperação."
+      );
+
+      recoveryKey.focus();
+
+      return;
+    }
+
+    verifyBtn.disabled =
+      true;
+
+    verifyBtn.textContent =
+      "Verificando...";
+
+    try{
+
+      const response =
+        await fetch(
+          API +
+          "/auth/recovery/verify",
+          {
+
+            method:
+              "POST",
+
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify({
+
+                username:
+                  user,
+
+                recoveryKey:
+                  key
+
+              })
+
+          }
+        );
+
+      const data =
+        await response.json()
+          .catch(
+            () => ({})
+          );
+
+      if(!response.ok){
+
+        throw new Error(
+          data.error ||
+          "Não foi possível validar a chave."
+        );
+
+      }
+
+      if(
+        data.success === false
+      ){
+
+        throw new Error(
+          data.error ||
+          "Chave inválida."
+        );
+
+      }
+
+      /*
+        O backend deverá devolver um
+        token temporário de recuperação.
+      */
+
+      recoveryToken =
+        data.recoveryToken ||
+        data.token;
+
+      if(!recoveryToken){
+
+        throw new Error(
+          "O servidor não enviou o token de recuperação."
+        );
+
+      }
+
+      showStep(2);
+
+      newPassword.focus();
+
+    }catch(error){
+
+      console.error(
+        error
+      );
+
+      showNotice(
+        notice1,
+        error.message ||
+        "Erro ao validar a recuperação."
+      );
+
+    }finally{
+
+      verifyBtn.disabled =
+        false;
+
+      verifyBtn.textContent =
+        "Verificar chave";
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   ALTERAR SENHA
+========================================================= */
+
+resetBtn.addEventListener(
+  "click",
+  async () => {
+
+    clearNotice(
+      notice2
+    );
+
+    const password =
+      newPassword.value;
+
+    const confirmation =
+      confirmPassword.value;
+
+    if(!recoveryToken){
+
+      showNotice(
+        notice2,
+        "A sessão de recuperação expirou. Comece novamente."
+      );
+
+      showStep(1);
+
+      return;
+    }
+
+    if(
+      password.length < 8
+    ){
+
+      showNotice(
+        notice2,
+        "A senha precisa ter pelo menos 8 caracteres."
+      );
+
+      newPassword.focus();
+
+      return;
+    }
+
+    if(
+      password !==
+      confirmation
+    ){
+
+      showNotice(
+        notice2,
+        "As senhas não são iguais."
+      );
+
+      confirmPassword.focus();
+
+      return;
+    }
+
+    resetBtn.disabled =
+      true;
+
+    resetBtn.textContent =
+      "Alterando...";
+
+    try{
+
+      const response =
+        await fetch(
+          API +
+          "/auth/recovery/reset",
+          {
+
+            method:
+              "POST",
+
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify({
+
+                recoveryToken,
+
+                newPassword:
+                  password
+
+              })
+
+          }
+        );
+
+      const data =
+        await response.json()
+          .catch(
+            () => ({})
+          );
+
+      if(!response.ok){
+
+        throw new Error(
+          data.error ||
+          "Não foi possível alterar a senha."
+        );
+
+      }
+
+      if(
+        data.success === false
+      ){
+
+        throw new Error(
+          data.error ||
+          "Erro ao alterar a senha."
+        );
+
+      }
+
+      recoveryToken =
+        null;
+
+      newPassword.value =
+        "";
+
+      confirmPassword.value =
+        "";
+
+      showStep(3);
+
+    }catch(error){
+
+      console.error(
+        error
+      );
+
+      showNotice(
+        notice2,
+        error.message ||
+        "Erro ao alterar a senha."
+      );
+
+    }finally{
+
+      resetBtn.disabled =
+        false;
+
+      resetBtn.textContent =
+        "Alterar senha";
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   MOSTRAR / ESCONDER SENHA
+========================================================= */
+
+document
+  .querySelectorAll(
+    ".show-password"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const target =
+            document.getElementById(
+              button.dataset.target
+            );
+
+          if(
+            target.type ===
+            "password"
+          ){
+
+            target.type =
+              "text";
+
+            button.textContent =
+              "🙈";
+
+          }else{
+
+            target.type =
+              "password";
+
+            button.textContent =
+              "👁";
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   VOLTAR
+========================================================= */
+
+document
+  .getElementById(
+    "backBtn"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      /*
+        Troque pelo endereço real
+        do site principal quando publicar.
+      */
+
+      window.location.href =
+        "/";
+
+    }
+  );
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+document
+  .getElementById(
+    "loginBtn"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      /*
+        Futuramente podemos apontar
+        diretamente para /login.
+      */
+
+      window.location.href =
+        "/";
+
+    }
+  );
+
+
+/* =========================================================
+   ENTER
+========================================================= */
+
+recoveryKey.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key ===
+      "Enter"
+    ){
+
+      verifyBtn.click();
+
+    }
+
+  }
+);
+
+confirmPassword.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key ===
+      "Enter"
+    ){
+
+      resetBtn.click();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   FORMATAÇÃO DA CHAVE
+========================================================= */
+
+recoveryKey.addEventListener(
+  "input",
+  () => {
+
+    recoveryKey.value =
+      recoveryKey.value
+        .toUpperCase()
+        .replace(
+          /[^A-Z0-9-]/g,
+          ""
+        )
+        .slice(0,32);
+
+  }
+);
+</script>
+
+</body>
+</html>
